@@ -1,0 +1,60 @@
+# Config definition
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 1.Data General Setting. Can be replaced in respective sets
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+DATA:
+ DATASETS:
+  NAMES: ('custom_seq_L:[1, 1024]_D:[-1,-1]',)
+  #ROOT_DIR: ('/data/chenjiayang/RNA/E2Efold-SS/preprocessed/rnastralign/',)     # 150
+  ROOT_DIR: ('none',)
+
+ DATALOADER:
+  NUM_WORKERS: 0
+  SAMPLER: 'random'
+  BATCH_SIZE: 1
+
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 2.Model General Setting. Can be replaced in respective sets Structure Information
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+MODEL:
+ DEVICE: "cuda"
+ DEVICE_ID: (1,)
+ BACKBONE_NAME: "esm1b-rna"                            #"esm1b-rna"  #"esm1b" #"msa_transformer"
+ SEQWISE_PREDICTOR_NAME: "none"
+ ELEWISE_PREDICTOR_NAME: "none"
+ PAIRWISE_PREDICTOR_NAME: "none"                        # "self-attention_2_sym_first:r-ss"
+ BACKBONE_RANDOM_INITIALIZATION: 0
+ PRETRAINED: 0
+ PRETRAINED_MODEL_PATH: './pretrained/esm1b_t33_650M_UR50S.pt'
+ BIAS_FREE: 0
+ BACKBONE_FROZEN: 1
+
+
+METRIC:
+ TYPE: 'none'  # top-precision:r-ss
+
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 4.Solver
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+SOLVER:
+ OUTPUT_DIR: "work_space/custom"
+
+ # APEX
+ APEX:
+  OPT_LEVEL: "none" #"none" #"none"     # "O0" "O1" "O2" "O3"
+
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# Eval Configuration
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+EVAL:
+ WEIGHT_PATH: "none"
+ DATALOADER:
+  BATCH_SIZE: -1
