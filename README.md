@@ -67,7 +67,7 @@ If you have any trouble with the deployment of the local version of RNA-FM, you 
 You can easily submit jobs on the server and download results from it afterwards, without setting up environment and occupying any computational resources.
 
 ## Tutorials <a name="tutorials"></a>
-More tutorials can be found from [https://mydkzgj.github.io/RNA-FM/](https://mydkzgj.github.io/RNA-FM/)  
+More tutorials can be found from [https://ml4bio.github.io/RNA-FM/](https://ml4bio.github.io/RNA-FM/)  
 
 ## Citations <a name="citations"></a>
 
