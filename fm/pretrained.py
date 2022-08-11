@@ -172,7 +172,7 @@ def esm_msa1_t12_100M_UR50S():
 
 
 # CJY for RNA
-def esm1b_rna_t12():
+def esm1b_rna_t12(model_path="./pretrained/RNA-FM_pretrained.pth"):
     # KAUST
     #model_location = "/ibex/scratch/liy0f/cjy/projects/PretrainBioLM/work_space/RNAcentral/checkpoints/checkpoint_best.pt"
 
@@ -193,6 +193,6 @@ def esm1b_rna_t12():
     #model_location = "/raid/databases/chenjiayang/PretrainedModel/RNAcentral/checkpoint_best.pt"
 
     # local
-    model_location = "./pretrained/RNA-FM_pretrained.pth"
+    model_location = model_path #"./pretrained/RNA-FM_pretrained.pth"
 
     return load_model_and_alphabet_local(model_location, theme="rna")
