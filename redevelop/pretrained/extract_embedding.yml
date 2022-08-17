@@ -23,7 +23,7 @@ DATA:
 MODEL:
  DEVICE: "cuda"
  DEVICE_ID: (1,)
- BACKBONE_NAME: "esm1b-rna"                            #"esm1b-rna"  #"esm1b" #"msa_transformer"
+ BACKBONE_NAME: "rna-fm"
  SEQWISE_PREDICTOR_NAME: "none"
  ELEWISE_PREDICTOR_NAME: "none"
  PAIRWISE_PREDICTOR_NAME: "none"                        # "self-attention_2_sym_first:r-ss"

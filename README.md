@@ -26,11 +26,10 @@ You can find more details about **RNA-FM** in our paper, ["Interpretable RNA Fou
   - [RNA-FM Embedding Generation](#RNA-FM_Embedding_Generation)
   - [RNA Secondary Structure Prediction](#RNA_Secondary_Structure_Prediction)
   - [Server](#Server)
-- [Tutorials](#tutorials)
+  - [Quick Start](#Quick_Start)
 - [Citations](#citations)
 - [License](#license)
 </details>
-
 
 ## Create Environment with Conda <a name="Setup_Environment"></a>
 First, download the repository and create the environment.
@@ -44,11 +43,10 @@ Then, activate the "RNA-FM" environment and enter into the workspace.
 conda activate RNA-FM
 cd ./redevelop
 ```
-
 ## Access pre-trained models. <a name="Available_Pretrained_Models"></a>
 Download pre-trained models from [this gdrive link](https://drive.google.com/drive/folders/1fWePKPQPFlQNEyJEgmJiGLurDYFD6KDI?usp=sharing) and place the pth files into the `pretrained` folder.
 
-## Apply RNA-FM. <a name="Usage"></a>
+## Apply RNA-FM with Existing Scripts. <a name="Usage"></a>
 ### 1. Embedding Extraction. <a name="RNA-FM_Embedding_Generation"></a>
 ```
 python launch/predict.py --config="pretrained/extract_embedding.yml" \
@@ -69,7 +67,25 @@ The predicted probability maps will be saved in form of `.npy` files, and the po
 If you have any trouble with the deployment of the local version of RNA-FM, you can access its online version from this link, [RNA-FM server](https://proj.cse.cuhk.edu.hk/rnafm/#/).
 You can easily submit jobs on the server and download results from it afterwards, without setting up environment and occupying any computational resources.
 
-## Tutorials <a name="tutorials"></a>
+
+## Quick Start for Further Development. <a name="Quick_Start"></a>
+PyTorch is the prerequisite package which you must have installed to use this repository.
+You can install `rna-fm` in your own environment with the following pip command if you just want to
+use the pre-trained language model. 
+you can either install rna-fm from PIPY:
+```
+pip insatll rna-fm
+```
+or install `rna-fm` from github:
+```
+cd ./RNA-FM
+pip insatll .
+```
+After installation, you can load the RNA-FM with the following code:
+```
+import fm
+backbone, alphabet = fm.pretrained.rna_fm_t12()
+```
 More tutorials can be found from [https://ml4bio.github.io/RNA-FM/](https://ml4bio.github.io/RNA-FM/)  
 
 ## Citations <a name="citations"></a>

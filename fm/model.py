@@ -59,7 +59,8 @@ def init_bert_params(module):
         normal_(module.k_proj.weight.data)
         normal_(module.v_proj.weight.data)
 
-class ProteinBertModel(nn.Module):
+class RNABertModel(nn.Module):
+    # referenced from ProteinBertModel (fairseq-esm)
     @classmethod
     def add_args(cls, parser):
         parser.add_argument(
