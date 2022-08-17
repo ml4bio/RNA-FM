@@ -74,12 +74,12 @@ You can install `rna-fm` in your own environment with the following pip command 
 use the pre-trained language model. 
 you can either install rna-fm from PIPY:
 ```
-pip insatll rna-fm
+pip install rna-fm
 ```
 or install `rna-fm` from github:
 ```
 cd ./RNA-FM
-pip insatll .
+pip install .
 ```
 After installation, you can load the RNA-FM with the following code:
 ```
