@@ -7,13 +7,9 @@
 import sys
 import collections
 import random
-import math
-import numbers
 import torch
 import numpy as np
-import torchvision.transforms.functional as TF
-from PIL import Image
-import warnings
+
 
 if sys.version_info < (3, 3):
     Sequence = collections.Sequence
