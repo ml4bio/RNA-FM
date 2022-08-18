@@ -104,7 +104,7 @@ with torch.no_grad():
     results = model(batch_tokens, repr_layers=[12])
 token_embeddings = results["representations"][12]
 ```
-More tutorials can be found from [https://ml4bio.github.io/RNA-FM/](https://ml4bio.github.io/RNA-FM/)  
+More tutorials can be found from [https://ml4bio.github.io/RNA-FM/](https://ml4bio.github.io/RNA-FM/). The related notebooks are stored in the `tutorials` folder. 
 
 ## Citations <a name="citations"></a>
 
