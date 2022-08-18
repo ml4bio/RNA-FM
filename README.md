@@ -81,10 +81,28 @@ or install `rna-fm` from github:
 cd ./RNA-FM
 pip install .
 ```
-After installation, you can load the RNA-FM with the following code:
+After installation, you can load the RNA-FM and extract its embeddings with the following code:
 ```
+import torch
 import fm
-backbone, alphabet = fm.pretrained.rna_fm_t12()
+
+# Load RNA-FM model
+model, alphabet = fm.pretrained.rna_fm_t12()
+batch_converter = alphabet.get_batch_converter()
+model.eval()  # disables dropout for deterministic results
+
+# Prepare data
+data = [
+    ("RNA1", "GGGUGCGAUCAUACCAGCACUAAUGCCCUCCUGGGAAGUCCUCGUGUUGCACCCCU"),
+    ("RNA2", "GGGUGUCGCUCAGUUGGUAGAGUGCUUGCCUGGCAUGCAAGAAACCUUGGUUCAAUCCCCAGCACUGCA"),
+    ("RNA3", "CGAUUCNCGUUCCC--CCGCCUCCA"),
+]
+batch_labels, batch_strs, batch_tokens = batch_converter(data)
+
+# Extract embeddings (on CPU)
+with torch.no_grad():
+    results = model(batch_tokens, repr_layers=[12])
+token_embeddings = results["representations"][12]
 ```
 More tutorials can be found from [https://ml4bio.github.io/RNA-FM/](https://ml4bio.github.io/RNA-FM/)  
 
