@@ -22,8 +22,8 @@ setup(
     author="CUHK AIH Lab",
     url="https://github.com/ml4bio/RNA-FM",
     license="MIT",
-    packages=["fm",],
-    data_files=[("source_docs/esm", ["LICENSE", "README.md"])],
+    packages=["fm", "fm/downstream", "fm/downstream/pairwise_predictor"],
+    data_files=[("source_docs/fm", ["LICENSE", "README.md"])],
     zip_safe=True,
     install_requires = [
         'numpy==1.22.0',

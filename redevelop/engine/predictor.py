@@ -11,7 +11,14 @@ import torch.nn as nn
 from ignite.engine import Engine, Events
 from ignite.metrics import Average
 
+import numpy as np
 import os
+import subprocess   # for ct file graph visualization
+
+abs_file = __file__
+work_dir = os.path.split(os.path.split(abs_file)[0])[0]
+print("work_dir:{}".format(work_dir))
+
 
 def print_format(dic):
     formative_dict = {}
@@ -78,8 +85,13 @@ def do_prediction(
         model,
         test_loader,
         save_embeddings=False,
+        save_embeddings_format="raw",
         save_results=True,
         save_frequency=2,   # save how many samples in a dict
+        save_file_prefix="",
+        threshold=0.5,
+        allow_noncanonical_pairs=True,
+        allow_visualization=False,
 ):
     device = cfg.MODEL.DEVICE
 
@@ -102,6 +114,7 @@ def do_prediction(
         import numpy as np
         evaluator.state.result_cache = {}
         evaluator.state.result_count = {}
+        #"""
         @evaluator.on(Events.ITERATION_COMPLETED)
         def save_results(engine):
             for key in engine.state.output["pd"].keys():
@@ -121,33 +134,103 @@ def do_prediction(
                 if key == "representations":
                     pds = engine.state.output["pd"][key][12].cpu().detach()
                 else:
-                    pds = torch.softmax(engine.state.output["pd"][key].cpu().detach(), dim=1)
+                    if len(engine.state.output["pd"][key].shape) == 4:
+                        pds = torch.softmax(engine.state.output["pd"][key].cpu().detach(), dim=1)
+                    else:
+                        pds = torch.sigmoid(engine.state.output["pd"][key].cpu().detach())
+                    #pds = torch.softmax(engine.state.output["pd"][key].cpu().detach(), dim=1)
                 batch_size = pds.shape[0]
 
                 for i in range(batch_size):
                     id = engine.state.output["name"][i]
+                    seq = engine.state.output["string"][i]
                     length = engine.state.output["length"][i]
                     if "contact" in key:
-                        pd_numpy = pds[i][1, 0:length, 0:length].numpy()
+                        pd_numpy = pds[i][0:length, 0:length].numpy()  # pd_numpy = pds[i][1, 0:length, 0:length].numpy()
                     elif "r-ss" in key:
-                        pd_numpy = pds[i][1, 0:length, 0:length].numpy()
-                        seq = engine.state.output["string"][i]
-                        save_file = os.path.join(save_pd_dir, "{}.ct".format(id))
-                        save_ss2ct(pd_numpy, seq, id, save_file, threshold=0.5)
+                        pd_numpy = pds[i][0:length, 0:length].numpy()
+                        # save post-processed map
+                        post_full_numpy, post_without_mlets_numpy, multiplet_list = postprocess(pd_numpy, seq, threshold=threshold, allow_nc=allow_noncanonical_pairs)
+                        save_post_dir = os.path.join(cfg.SOLVER.OUTPUT_DIR, key + "_post_npy_full_bps")
+                        if not os.path.exists(save_post_dir):
+                            os.makedirs(save_post_dir)
+                        np.save(os.path.join(save_post_dir, "{}".format(id)), post_full_numpy)
+                        save_post_dir = os.path.join(cfg.SOLVER.OUTPUT_DIR, key + "_post_npy_no_mlets")
+                        if not os.path.exists(save_post_dir):
+                            os.makedirs(save_post_dir)
+                        np.save(os.path.join(save_post_dir, "{}".format(id)), post_without_mlets_numpy)
+
+                        # save ct file, with post_without_mbp_numpy
+                        save_predCT_dir = os.path.join(cfg.SOLVER.OUTPUT_DIR, "pred_ct")
+                        if not os.path.exists(save_predCT_dir):
+                            os.makedirs(save_predCT_dir)
+                        matrix2ct(post_without_mlets_numpy, seq, id, save_predCT_dir, threshold=threshold, with_post=False, nc=allow_noncanonical_pairs)
+
+                        # generate Graph View
+                        if True:
+                            save_predGraphView_dir = os.path.join(cfg.SOLVER.OUTPUT_DIR, "pred_graph_view")
+                            if not os.path.exists(save_predGraphView_dir):
+                                os.makedirs(save_predGraphView_dir)
+
+                            vis_tool_path = os.path.join(work_dir, "utils", "rna_ss", "VARNAv3-93.jar")
+                            nc_suffix = "_nc" if allow_noncanonical_pairs else ""
+                            # no multiplets
+                            subprocess.Popen(
+                                ["java", "-cp", vis_tool_path, "fr.orsay.lri.varna.applications.VARNAcmd",
+                                 '-i', os.path.join(save_predCT_dir, id + '.ct'),
+                                 '-o',
+                                 os.path.join(save_predGraphView_dir, id + '_no_multiplets{}.png'.format(nc_suffix)),
+                                 # radiate_
+                                 '-algorithm', 'radiate', '-resolution', '8.0', '-bpStyle', 'lw'],
+                                stderr=subprocess.STDOUT, stdout=subprocess.PIPE).communicate()[0]
+                            # with multiplets
+                            aux_BPs = []
+                            for mbp in multiplet_list:
+                                aux_BPs.append("({},{}):color=#00FF00".format(mbp[0], mbp[1]))
+                            aux_BPs = ";".join(aux_BPs)
+                            print("auxBPs:{}".format(aux_BPs))
+                            subprocess.Popen(
+                                ["java", "-cp", vis_tool_path, "fr.orsay.lri.varna.applications.VARNAcmd",
+                                 '-i', os.path.join(save_predCT_dir, id + '.ct'),
+                                 '-o', os.path.join(save_predGraphView_dir, id + '_full{}.png'.format(nc_suffix)),
+                                 # radiate_
+                                 '-algorithm', 'radiate', '-resolution', '8.0', '-bpStyle', 'lw', '-auxBPs',
+                                 aux_BPs],
+                                stderr=subprocess.STDOUT, stdout=subprocess.PIPE).communicate()[0]
+
 
                     elif key == "representations":
                         pd_numpy = pds[i][1:1 + engine.state.output["length"][i]]
+                        print(pd_numpy.shape)
+                        if pd_numpy.shape[0] != engine.state.output["length"][i]:
+                            raise Exception
+                        # CJY
+                        if save_embeddings_format == "mean":
+                            pd_numpy = pd_numpy.mean(dim=0)   # mean  along sequence direction
+                        pd_numpy = pd_numpy.numpy()
 
                     if save_frequency == 1:
-                        np.save(os.path.join(save_pd_dir, "{}".format(id)), pd_numpy)
+                        #print(save_pd_dir)
+                        np.save(os.path.join(save_pd_dir, "{}".format(id.replace(" ", "_"))), pd_numpy)
                     else:
                         engine.state.result_cache[key][id] = pd_numpy
                         engine.state.result_count[key] += 1
                         #print(engine.state.result_count[key])
+
                         if engine.state.result_count[key] % save_frequency == 0:
-                            np.save(os.path.join(save_pd_dir, "{}-collection-{}-{}".format(key, save_frequency, engine.state.result_count[key]//save_frequency)), engine.state.result_cache[key])
+                            np.save(os.path.join(
+                                save_pd_dir, "{}-{}-collection-{}-{}".format(save_file_prefix, key, save_frequency, engine.state.result_count[key] // save_frequency)).strip("-"),
+                                engine.state.result_cache[key]
+                            )
                             engine.state.result_cache[key] = {}
 
+                if save_frequency != 1 and engine.state.iteration == len(test_loader) and engine.state.result_cache[key] != {}:
+                    np.save(
+                        os.path.join(save_pd_dir, "{}-{}-collection-{}-{}-left{}".format(save_file_prefix, key, save_frequency, engine.state.result_count[key] // save_frequency, engine.state.result_count[key])).strip("-"),
+                        engine.state.result_cache[key]
+                    )
+                    engine.state.result_cache[key] = {}
+        #"""
 
     @evaluator.on(Events.EPOCH_COMPLETED)
     def log_inference_results(engine):
@@ -159,64 +242,23 @@ def do_prediction(
     return Eval_Record
 
 
-import numpy as np
-def preprocess_ss_map(prob_map, seq, threshold=0.5, nc=True):
-    canonical_pairs = ['AU', 'UA', 'GC', 'CG', 'GU', 'UG']  # for farfar2
-
-    # candidate 1: threshold
-    contact = (prob_map > threshold)
-
-    # notes: for e2efold, do not need this step
-    prob_map = prob_map * (1 - np.eye(prob_map.shape[0]))
-
-    seq_len = len(seq)
-
-    x_array, y_array = np.nonzero(contact)
-    prob_array = []
-    for i in range(x_array.shape[0]):
-        prob_array.append(prob_map[x_array[i], y_array[i]])
-    prob_array = np.array(prob_array)
-
-    sort_index = np.argsort(-prob_array)
-
-    mask_map = np.zeros_like(contact)
-    already_x = set()
-    already_y = set()
-    for index in sort_index:
-        x = x_array[index]
-        y = y_array[index]
-
-        seq_pair = seq[x] + seq[y]
-        if seq_pair not in canonical_pairs and nc == True:
-            # print(seq_pair)
-            continue
-            pass
-
-        if x in already_x or y in already_y:
-            continue
-        else:
-            mask_map[x, y] = 1
-            already_x.add(x)
-            already_y.add(y)
-
-    contact = contact * mask_map
-
-    return contact
-
-
-
-def save_ss2ct(prob_map, seq, seq_id, save_file, threshold=0.5):
+def matrix2ct(prob_map, seq, seq_id, ct_dir, threshold=0.5, with_post=False, nc=False):
     """
     :param contact: binary matrix numpy
     :param seq: string
     :return:
-    generate ct file from ss npy
     """
+    # 1.process matrix to make it obey the required constraints (maybe need sequence string)
+    if with_post == True:
+        contact = postprocess(prob_map, threshold=threshold, seq=seq, nc=nc)
+    else:
+        if threshold > 0:
+            contact = (prob_map > threshold)
+        else:
+            contact = prob_map
+
+    # 2.write ct file
     seq_len = len(seq)
-
-    contact = preprocess_ss_map(prob_map, seq, threshold)
-    #contact = preprocess_map_umap(prob_map, seq, threshold)  # umap
-
     structure = np.where(contact)
     pair_dict = dict()
     for i in range(seq_len):
@@ -230,17 +272,62 @@ def save_ss2ct(prob_map, seq, seq_id, save_file, threshold=0.5):
     fifth_col = [pair_dict[i]+1 for i in range(seq_len)]
     last_col = list(range(1, seq_len+1))
 
-    save_dir, _ = os.path.split(save_file)
-    if os.path.exists(save_dir) != True:
-        os.makedirs(save_dir)
+    if os.path.exists(ct_dir) != True:
+        os.makedirs(ct_dir)
+    ct_file = os.path.join(ct_dir, seq_id+".ct")
 
-    with open(save_file, "w") as f:
-        f.write("{}\t{}\n".format(seq_len, seq_id))
+    with open(ct_file, "w") as f:
+        f.write("{}\t{}\n".format(seq_len, seq_id))  # header
         for i in range(seq_len):
             f.write("{}\t{}\t{}\t{}\t{}\t{}\n".format(first_col[i], second_col[i], third_col[i], fourth_col[i], fifth_col[i], last_col[i]))
 
-    # save secondary structure
-    #save_png_file = save_file.replace(".ct", ".png")
-    #save_png(contact, save_png_file, vmin=-1, vmax=1)
 
-    return contact
+
+def postprocess(prob_map, seq, threshold=0.5, allow_nc=True):
+    # we suppose that probmay cantains values range from [0,1], so is the threshold
+    canonical_pairs = ['AU', 'UA', 'GC', 'CG', 'GU', 'UG']
+
+    # candidate 1: threshold  (we obatin the full contact matrix)
+    prob_map = prob_map * (1 - np.eye(prob_map.shape[0]))  # no  care about the diagonal
+    pred_map = (prob_map > threshold)
+
+    # candidate 2: split the multiplets, resulting in cm without multiplets. Also filter the non-canonical pairs
+    # when several pairs are conflict by presenting in the same row or column, we choose the one with highest score.
+    seq_len = len(seq)
+    x_array, y_array = np.nonzero(pred_map)
+    prob_array = []
+    for i in range(x_array.shape[0]):
+        prob_array.append(prob_map[x_array[i], y_array[i]])
+    prob_array = np.array(prob_array)
+
+    sort_index = np.argsort(-prob_array)
+
+    mask_map = np.zeros_like(pred_map)
+    already_x = set()
+    already_y = set()
+    multiplet_list = []
+    for index in sort_index:
+        x = x_array[index]
+        y = y_array[index]
+
+        # # no sharp stem-loop
+        if abs(x - y) <= 1:    # when <=1, allow 1 element loop
+            continue
+
+        seq_pair = seq[x] + seq[y]
+        if seq_pair not in canonical_pairs and allow_nc == False:
+            # print(seq_pair)
+            continue
+            pass
+
+        if x in already_x or y in already_y:  # this is conflict
+            multiplet_list.append([x+1,y+1])
+            continue
+        else:
+            mask_map[x, y] = 1
+            already_x.add(x)
+            already_y.add(y)
+
+    pred_map_without_multiplets = pred_map * mask_map
+
+    return pred_map, pred_map_without_multiplets, multiplet_list

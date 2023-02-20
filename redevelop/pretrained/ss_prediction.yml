@@ -5,11 +5,6 @@
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
 DATA:
- DATASETS:
-  NAMES: ('rnastralign_seq_L:[1, 600]_D:[-1,-1]', 'spot-rna-bprna_seq_L:[1,1022]_D:[-1,-1]', 'spot-rna-pdb_seq_L:[1,1022]_D:[-1,-1]')
-  ROOT_DIR: ('/data/chenjiayang/RNA/E2Efold-SS/preprocessed/rnastralign/', '/data/chenjiayang/RNA/SPOT-RNA/preprocessed/bpRNA/', '/data/chenjiayang/RNA/SPOT-RNA/preprocessed/PDB/') # 150
-  #ROOT_DIR: ('/share/liyu/RNA/E2Efold-SS/preprocessed/rnastralign/', '/share/liyu/RNA/SPOT-RNA/preprocessed/bpRNA/', '/share/liyu/RNA/SPOT-RNA/preprocessed/PDB/')      # SZ-GPU
-
  DATALOADER:
   NUM_WORKERS: 0
   SAMPLER: 'random'
@@ -22,28 +17,23 @@ DATA:
 # -----------------------------------------------------------------------------
 MODEL:
  DEVICE: "cuda"
- DEVICE_ID: (1,)
+ DEVICE_ID: (0,)
  BACKBONE_NAME: "rna-fm"
- SEQWISE_PREDICTOR_NAME: "none"
- ELEWISE_PREDICTOR_NAME: "none"
- PAIRWISE_PREDICTOR_NAME: "pc-resnet_2_sym_first:r-ss" # "self-attention_2_sym_first:r-ss"
- BACKBONE_RANDOM_INITIALIZATION: 0
+ PAIRWISE_PREDICTOR_NAME: "pc-resnet_1_sym_first:r-ss"
  PRETRAINED: 0
- PRETRAINED_MODEL_PATH: './pretrained/esm1b_t33_650M_UR50S.pt'
- BIAS_FREE: 0
- BACKBONE_FROZEN: 0
+ THRESHOLD: 0.33993712
 
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
 # 3.LOSS General Setting. Can be replaced in respective sets Structure Information
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
-LOSS:
- TYPE: 'ce-masked-loss:r-ss*1'
- WEIGHT_MODE: "fixed"     # "none", "fixed", "adaptive"
-
-METRIC:
- TYPE: 'elewise-classification-report_triu1:r-ss'  # top-precision:r-ss
+#LOSS:
+# TYPE: 'bce-logit-masked-loss:r-ss*1'
+# WEIGHT_MODE: "fixed"
+#
+#METRIC:
+# TYPE: 'elewise-classification-report_triu1:r-ss'  # top-precision:r-ss
 
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
@@ -55,11 +45,10 @@ SOLVER:
  EVAL_PERIOD: 1
  CHECKPOINT_PERIOD: 500
  LOG_PERIOD: 4000 #500
- OUTPUT_DIR: "work_space/${CONFIG_NAME}_${WEIGHT_STATE}_${STEM_FREEZE}-new"
 
  # OPTIMIZER
  OPTIMIZER:
-  NAME: "AdamW"                         #"SGD", "Adam"
+  NAME: "AdamW"
   MOMENTUM: 0.9
   WEIGHT_DECAY: 0.0005
   WEIGHT_DECAY_BIAS: 0.
@@ -67,9 +56,9 @@ SOLVER:
 
  # SCHEDULER
  SCHEDULER:
-  NAME: "WarmupCosineLR"           # "WarmupMultiStepLR", "WarmupCosineLR"
-  STEP_UNIT: "epoch"               # "epoch", "iteration"
-  STEP_FREQUENCY: "iteration"      # "epoch", "iteration"
+  NAME: "WarmupCosineLR"
+  STEP_UNIT: "epoch"
+  STEP_FREQUENCY: "iteration"
   BASE_LR: 0.0001
   BIAS_LR_FACTOR: 1
   START_FROM_SCRATCH: 1
@@ -82,16 +71,12 @@ SOLVER:
   MILESTONES: [10, 15, 20]
   MAIN_STEPS: 50
 
- # APEX
- APEX:
-  OPT_LEVEL: "O1" #"none" #"none"     # "O0" "O1" "O2" "O3"
-
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
 # Eval Configuration
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
 EVAL:
- WEIGHT_PATH: "pretrained/RNA-FM_SS-ResNet.pth"
+ WEIGHT_PATH: "pretrained/Models/SS/RNA-FM-ResNet_PDB-All.pth"
  DATALOADER:
   BATCH_SIZE: -1

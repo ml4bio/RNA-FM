@@ -120,3 +120,4 @@ def load_rnafm_model_and_alphabet_hub(model_name, theme="rna"):
     else:
         raise Exception("Unknown model name: {}".format(model_name))
     return load_model_and_alphabet_core(model_data, regression_data, theme)
+

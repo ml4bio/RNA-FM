@@ -29,9 +29,6 @@ from engine.predictor import do_prediction
 
 from config import cfg
 from utils.logger import setup_logger
-from torch.utils.tensorboard import SummaryWriter
-
-from utils.tensorboard_logger import record_dict_into_tensorboard
 
 
 def seed_torch(seed=2018):
@@ -42,7 +39,8 @@ def seed_torch(seed=2018):
     torch.cuda.manual_seed(seed)
     torch.backends.cudnn.deterministic = True
 
-def predict(cfg, save_embeddings=False, save_frequency=1):
+def predict(cfg, save_embeddings=False, save_embeddings_format="raw", save_frequency=1, save_file_prefix="",
+            threshold=0.5, allow_nc=True, allow_vis=True):
     # build model and load parameter
     model = build_model(cfg)
     if cfg.EVAL.WEIGHT_PATH != "none":
@@ -56,8 +54,13 @@ def predict(cfg, save_embeddings=False, save_frequency=1):
                                model,
                                input_data_loader,
                                save_embeddings=save_embeddings,
+                               save_embeddings_format=save_embeddings_format,
                                save_results=True,
-                               save_frequency=save_frequency
+                               save_frequency=save_frequency,
+                               save_file_prefix=save_file_prefix,
+                               threshold=threshold,
+                               allow_noncanonical_pairs=allow_nc,
+                               allow_visualization=allow_vis
                                )
 
     # logging with tensorboard summaryWriter
@@ -108,6 +111,27 @@ def main():
     )
     parser.add_argument(
         "--save_embeddings", action='store_true'
+    )
+    parser.add_argument(
+        "--save_embeddings_format", default="raw", choices=["raw", "mean"]
+    )
+    parser.add_argument(
+        "--save_file_prefix", default="", type=str
+    )
+    parser.add_argument(
+        "--threshold", default=-1, type=float,
+    )
+    parser.add_argument(
+        "--forbid_nc", action='store_true'
+    )
+    parser.add_argument(
+        "--allow_vis", action='store_true'
+    )
+    parser.add_argument(
+        "--device", default="gpu", choices=["cpu", "gpu"]
+    )
+    parser.add_argument(
+        "--gpu_id", default=0, type=int,
     )
 
 
@@ -161,29 +185,50 @@ def main():
     if args.model_file is not None:
         cfg.EVAL.WEIGHT_PATH = args.model_file
 
+    if args.threshold != -1:
+        threshold = args.threshold
+        cfg.MODEL.THRESHOLD = threshold
+    else:
+        threshold = cfg.MODEL.THRESHOLD
+
+    if args.device == "cpu":
+        cfg.MODEL.DEVICE = "cpu"
+    else:
+        cfg.MODEL.DEVICE = "cuda"
+        cfg.MODEL.DEVICE_ID = (args.gpu_id,)
+
     cfg.freeze()
 
     output_dir = cfg.SOLVER.OUTPUT_DIR
     if output_dir and not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
-    logger = setup_logger("prediction", output_dir, "predict_on_{}".format(cfg.DATA.DATASETS.NAMES), 0)
-    logger.info("Using {} GPUS".format(num_gpus))
-    logger.info(args)
+    logger = setup_logger("prediction", output_dir, "prediction", 0)
+    if args.device == "gpu":
+        logger.info("Using {} GPUS, GPU ID: {}".format(num_gpus, args.gpu_id))
+    else:
+        logger.info("Using CPU")
+    #logger.info(args)
 
     if args.config_file != "":
         logger.info("Loaded configuration file {}".format(args.config_file))
         with open(args.config_file, 'r') as cf:
             config_str = "\n" + cf.read()
-            logger.info(config_str)
-    logger.info("Running with config:\n{}".format(cfg))
+            #logger.info(config_str)
+    #logger.info("Running with config:\n{}".format(cfg))
+
+    logger.info("Model File:{}".format(cfg.EVAL.WEIGHT_PATH))
+    logger.info("Batch Size:{}".format(cfg.EVAL.DATALOADER.BATCH_SIZE))
+    logger.info("Threshold:{}".format(threshold))
 
     if cfg.MODEL.DEVICE == "cuda":
         os.environ['CUDA_VISIBLE_DEVICES'] = ",".join("%s"%i for i in cfg.MODEL.DEVICE_ID)   # int tuple -> str # cfg.MODEL.DEVICE_ID
     cudnn.benchmark = True
 
-    logger.info("Predict on the {} dataset".format(args.data_path))
-    predict(cfg, args.save_embeddings, args.save_frequency)
+    logger.info("Prediction Dataset: {}".format(cfg.DATA.DATASETS.ROOT_DIR))
+    allow_nc = not args.forbid_nc
+    predict(cfg, args.save_embeddings, args.save_embeddings_format, args.save_frequency, args.save_file_prefix,
+            threshold, allow_nc, args.allow_vis)
 
 
 if __name__ == '__main__':

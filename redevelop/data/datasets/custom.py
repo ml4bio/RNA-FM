@@ -79,7 +79,7 @@ class Custom(BIO_SEQ):
                     break
                 #"""
 
-                self.data.append({"seq":(record.description, formatted_seq)})
+                self.data.append({"seq":(record.id, formatted_seq)})   #description
 
                 """
                 num_count += 1

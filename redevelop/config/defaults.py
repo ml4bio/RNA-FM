@@ -86,6 +86,8 @@ _C.MODEL.BIAS_FREE = 0
 # freeze backbone
 _C.MODEL.BACKBONE_FROZEN = 0
 
+_C.MODEL.THRESHOLD = 0.5
+
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
 # 3.LOSS General Setting. Can be replaced in respective sets  Structure Information
