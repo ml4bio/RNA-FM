@@ -44,7 +44,7 @@ conda activate RNA-FM
 cd ./redevelop
 ```
 ## Access pre-trained models. <a name="Available_Pretrained_Models"></a>
-Download pre-trained models from [this gdrive link](https://drive.google.com/drive/folders/1fWePKPQPFlQNEyJEgmJiGLurDYFD6KDI?usp=sharing) and place the pth files into the `pretrained` folder.
+Download pre-trained models from [this gdrive link](https://drive.google.com/drive/folders/1VGye74GnNXbUMKx6QYYectZrY7G2pQ_J?usp=share_link) and place the pth files into the `pretrained` folder.
 
 ## Apply RNA-FM with Existing Scripts. <a name="Usage"></a>
 ### 1. Embedding Extraction. <a name="RNA-FM_Embedding_Generation"></a>
