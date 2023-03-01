@@ -34,7 +34,7 @@ You can find more details about **RNA-FM** in our paper, ["Interpretable RNA Fou
 ## Create Environment with Conda <a name="Setup_Environment"></a>
 First, download the repository and create the environment.
 ```
-git clone https://github.com/mydkzgj/RNA-FM.git
+git clone https://github.com/ml4bio/RNA-FM.git
 cd ./RNA-FM
 conda env create -f environment.yml
 ```
