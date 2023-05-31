@@ -29,6 +29,8 @@ class Custom(BIO_SEQ):
         super().__init__(root=root, theme="rna", data_type=data_type, set_name=set_name, transform=transform,
                          length_limit=length_limit, length_subsample_mode=length_subsample_mode,
                          depth_limit=depth_limit, depth_subsample_mode=depth_subsample_mode, use_cache=use_cache)
+        if os.path.exists(self.root) != True:
+            raise Exception("'{}' does not exist!".format(self.root))
 
         if os.path.isdir(self.root):
             self.inputs_format = "folder"
