@@ -27,6 +27,7 @@ You can find more details about **RNA-FM** in our paper, ["Interpretable RNA Fou
   - [RNA Secondary Structure Prediction](#RNA_Secondary_Structure_Prediction)
   - [Server](#Server)
   - [Quick Start](#Quick_Start)
+- [Related RNA Language Models](#Review)
 - [Citations](#citations)
 - [License](#license)
 </details>
@@ -105,6 +106,17 @@ with torch.no_grad():
 token_embeddings = results["representations"][12]
 ```
 More tutorials can be found from [https://ml4bio.github.io/RNA-FM/](https://ml4bio.github.io/RNA-FM/). The related notebooks are stored in the `tutorials` folder. 
+
+## Related RNA Language Models (BERT-style) <a name="Review"></a>
+| Shorthand | Subject | Input | Token | Dataset | Description  | Paper |
+|-----------|---------|-------|--------------|-------|--------------| ---- | 
+| [RNABERT](https://github.com/mana438/RNABERT)   | ncRNA   | Seq | base | RNAcentral (762370) & Rfam 14.3 dataset (trained with partial MSA）| Specialized in structural alignment and clustering | [Informative RNA base embedding for RNA structural alignment and clustering by deep representation learning](https://doi.org/10.1093/nargab/lqac012) |
+| UNI-RNA   | RNA     | Seq   | base | RNAcentral & nt & GWH (1 billion) | General model with larger scale and datasets than RNA-FM | [UNI-RNA: UNIVERSAL PRE-TRAINED MODELS REVOLUTIONIZE RNA RESEARCH](https://doi.org/10.1101/2023.07.11.548588) |
+| [RNA-MSM](https://github.com/yikunpku/RNA-MSM)   | ncRNA   | MSA   | base | 4069 RNA families from Rfam 14.7 | Model utilize evolutional information from MSA directly | [Multiple sequence-alignment-based RNA language model and its application to structural inference](https://doi.org/10.1093/nar/gkad1031)
+| [SpliceBERT](https://github.com/biomedAI/SpliceBERT) | pre-mRNA | Seq  | base | 2 million precursor messenger RNA (pre-mRNA) | Specialized in RNA splicing | [Self-supervised learning on millions of pre-mRNA sequences improves sequence-based RNA splicing prediction](https://doi.org/10.1101/2023.01.31.526427)
+| CodonBERT  | mRNA CDS | Seq  | codon (3mer) | 10 million mRNAs from NCBI | Only focus on CDS of mRNA without UTRs | [CodonBERT: Large Language Models for mRNA design and optimization](https://doi.org/10.1101/2023.09.09.556981)
+| [UTR-LM](https://github.com/a96123155/UTR-LM)  | mRNA 5'UTR | Seq | base | 700K 5'UTRs from Ensembl & eGFP & mCherry & Cao | Used for 5'UTR and mRNA expression related tasks | [A 5' UTR Language Model for Decoding Untranslated Regions of mRNA and Function Predictions](https://doi.org/10.1101/2023.10.11.561938)
+| [3UTRBERT](https://github.com/yangyn533/3UTRBERT)  | mRNA 3'UTR | Seq | k-mer | 20,362 3'UTRs | Used for 3'UTR mediated gene regulation tasks | [Deciphering 3’ UTR mediated gene regulation using interpretable deep representation learning](https://doi.org/10.1101/2023.09.08.556883)
 
 ## Citations <a name="citations"></a>
 
