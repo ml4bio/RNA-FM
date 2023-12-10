@@ -118,7 +118,7 @@ More tutorials can be found from [https://ml4bio.github.io/RNA-FM/](https://ml4b
 | [CodonBERT]((https://doi.org/10.1101/2023.09.09.556981)) | No | mRNA CDS | 12 | 768 | 512*2 | Seq  | codon (3mer) | 10 million mRNAs from NCBI | Only focus on CDS of mRNA without UTRs | 2023.09 | bioRxiv |
 | [UTR-LM](https://doi.org/10.1101/2023.10.11.561938) | [Yes](https://github.com/a96123155/UTR-LM)  | mRNA 5'UTR | 6 | 128 | $\infty$ | Seq | base | 700K 5'UTRs from Ensembl & eGFP & mCherry & Cao | Used for 5'UTR and mRNA expression related tasks | 2023.10 | bioRxiv |
 | [3UTRBERT](https://doi.org/10.1101/2023.09.08.556883) | [Yes](https://github.com/yangyn533/3UTRBERT)  | mRNA 3'UTR | 12 | 768 | 512 | Seq | k-mer | 20,362 3'UTRs | Used for 3'UTR mediated gene regulation tasks |  2023.09 | bioRxiv |
-
+| [BigRNA](https://doi.org/10.1101/2023.09.20.558508) | No  | DNA | - | - | - | Seq | - | thousands of genome-matched datasets | tissue-specific RNA expression, splicing, microRNA sites, and RNA binding protein |  2023.09 | bioRxiv |
 
 ## Citations <a name="citations"></a>
 
