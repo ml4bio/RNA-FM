@@ -1,4 +1,6 @@
 # RNA-FM
+Update March 2024: CDS-FM, a foundation model pre-trained on coding sequences (CDS) in mRNA is now released! The model can take into CDSs and represent them with contextual embeddings, benefiting mRNA and protein related tasks.
+
 This repository contains codes and pre-trained models for **RNA foundation model (RNA-FM)**.
 **RNA-FM outperforms all tested single-sequence RNA language models across a variety of structure prediction tasks as well as several function-related tasks.**
 You can find more details about **RNA-FM** in our paper, ["Interpretable RNA Foundation Model from Unannotated Data for Highly Accurate RNA Structure and Function Predictions" (Chen et al., 2022).](https://arxiv.org/abs/2204.00300)
@@ -56,6 +58,13 @@ python launch/predict.py --config="pretrained/extract_embedding.yml" \
 ```
 RNA-FM embeddings with shape of (L,640) will be saved in the `$save_dir/representations`.
 
+As For CDS-FM, you can call it with an extra argument, `MODEL.BACKBONE_NAME`:
+```
+python launch/predict.py --config="pretrained/extract_embedding.yml" \
+--data_path="./data/examples/example.fasta" --save_dir="./resuts" \
+--save_frequency 1 --save_embeddings --save_embeddings_format raw MODEL.BACKBONE_NAME cds-fm
+```
+
 ### 2. Downstream Prediction - RNA secondary structure. <a name="RNA_Secondary_Structure_Prediction"></a>
 ```
 python launch/predict.py --config="pretrained/ss_prediction.yml" \
@@ -106,6 +115,30 @@ with torch.no_grad():
 token_embeddings = results["representations"][12]
 ```
 More tutorials can be found from [https://ml4bio.github.io/RNA-FM/](https://ml4bio.github.io/RNA-FM/). The related notebooks are stored in the `tutorials` folder. 
+
+As for CDS-FM, the above code needs a slight revision. To be noted, the length of input RNA sequences should be the multiple of 3 to ensure the sequence can be tokenized into a series of codons (3-mer).
+```
+import torch
+import fm
+
+# Load CDS-FM model
+model, alphabet = fm.pretrained.cds_fm_t12()
+batch_converter = alphabet.get_batch_converter()
+model.eval()  # disables dropout for deterministic results
+
+# Prepare data
+data = [
+    ("CDS1", "AUGGGGUGCGAUCAUACCAGCACUAAUGCCCUCCUGGGAAGUCCUCGUGUUGCACCCCUA"),
+    ("CDS2", "AUGGGGUGUCGCUCAGUUGGUAGAGUGCUUGCCUGGCAUGCAAGAAACCUUGGUUCAAUCCCCAGCACUGCA"),
+    ("CDS3", "AUGCGAUUCNCGUUCCC--CCGCCUCC"),
+]
+batch_labels, batch_strs, batch_tokens = batch_converter(data)
+
+# Extract embeddings (on CPU)
+with torch.no_grad():
+    results = model(batch_tokens, repr_layers=[12])
+token_embeddings = results["representations"][12]
+```
 
 ## Related RNA Language Models (BERT-style) <a name="Review"></a>
 | Shorthand | Code | Subject | Layers | Embed Dim | Max Length | Input | Token | Dataset | Description | Year | Publisher |

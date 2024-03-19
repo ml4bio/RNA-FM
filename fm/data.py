@@ -10,7 +10,7 @@ import re
 import shutil
 import torch
 from pathlib import Path
-from .constants import proteinseq_toks, rnaseq_toks
+from .constants import proteinseq_toks, rnaseq_toks, rnaseq_3mer_toks
 
 RawMSA = Sequence[Tuple[str, str]]
 
@@ -94,6 +94,7 @@ class Alphabet(object):
         prepend_bos: bool = True,
         append_eos: bool = False,
         use_msa: bool = False,
+        k_mer: int = 1,
     ):
         self.standard_toks = list(standard_toks)
         self.prepend_toks = list(prepend_toks)
@@ -101,6 +102,7 @@ class Alphabet(object):
         self.prepend_bos = prepend_bos
         self.append_eos = append_eos
         self.use_msa = use_msa
+        self.k_mer = k_mer
 
         self.all_toks = list(self.prepend_toks)
         self.all_toks.extend(self.standard_toks)
@@ -139,33 +141,79 @@ class Alphabet(object):
         return cls(standard_toks=d["toks"], **kwargs)
 
     @classmethod
-    def from_architecture(cls, name: str, theme="protein") -> "Alphabet":
+    def from_architecture(cls, name: str, theme: str = "protein") -> "Alphabet":
+        if theme == "protein":
+            seq_toks = proteinseq_toks
+            k_mer = 1
+        elif theme == "rna":
+            seq_toks = rnaseq_toks
+            k_mer = 1
+        elif theme == "rna-3mer":
+            seq_toks = rnaseq_3mer_toks
+            k_mer = 3
+        else:
+            raise Exception("Unknown theme {}".format(theme))
+
         if name in ("ESM-1", "protein_bert_base"):
-            standard_toks = proteinseq_toks["toks"] if theme == "protein" else rnaseq_toks["toks"]
+            standard_toks = seq_toks["toks"]
             prepend_toks: Tuple[str, ...] = ("<null_0>", "<pad>", "<eos>", "<unk>")
             append_toks: Tuple[str, ...] = ("<cls>", "<mask>", "<sep>")
             prepend_bos = True
             append_eos = False
             use_msa = False
         elif name in ("ESM-1b", "roberta_large"):
-            standard_toks = proteinseq_toks["toks"] if theme == "protein" else rnaseq_toks["toks"]
+            standard_toks = seq_toks["toks"]
             prepend_toks = ("<cls>", "<pad>", "<eos>", "<unk>")
             append_toks = ("<mask>",)
             prepend_bos = True
             append_eos = True
             use_msa = False
         elif name in ("MSA Transformer", "msa_transformer"):
-            standard_toks = proteinseq_toks["toks"] if theme == "protein" else rnaseq_toks["toks"]
+            standard_toks = seq_toks["toks"]
             prepend_toks = ("<cls>", "<pad>", "<eos>", "<unk>")
             append_toks = ("<mask>",)
             prepend_bos = True
             append_eos = False
             use_msa = True
+        elif "invariant_gvp" in name.lower():
+            standard_toks = seq_toks["toks"]
+            prepend_toks = ("<null_0>", "<pad>", "<eos>", "<unk>")
+            append_toks = ("<mask>", "<cath>", "<af2>")
+            prepend_bos = True
+            append_eos = False
+            use_msa = False
         else:
             raise ValueError("Unknown architecture selected")
-        return cls(
-            standard_toks, prepend_toks, append_toks, prepend_bos, append_eos, use_msa
-        )
+        return cls(standard_toks, prepend_toks, append_toks, prepend_bos, append_eos, use_msa, k_mer)
+
+    # @classmethod
+    # def from_architecture(cls, name: str, theme="protein") -> "Alphabet":
+    #     if name in ("ESM-1", "protein_bert_base"):
+    #         standard_toks = proteinseq_toks["toks"] if theme == "protein" else rnaseq_toks["toks"]
+    #         prepend_toks: Tuple[str, ...] = ("<null_0>", "<pad>", "<eos>", "<unk>")
+    #         append_toks: Tuple[str, ...] = ("<cls>", "<mask>", "<sep>")
+    #         prepend_bos = True
+    #         append_eos = False
+    #         use_msa = False
+    #     elif name in ("ESM-1b", "roberta_large"):
+    #         standard_toks = proteinseq_toks["toks"] if theme == "protein" else rnaseq_toks["toks"]
+    #         prepend_toks = ("<cls>", "<pad>", "<eos>", "<unk>")
+    #         append_toks = ("<mask>",)
+    #         prepend_bos = True
+    #         append_eos = True
+    #         use_msa = False
+    #     elif name in ("MSA Transformer", "msa_transformer"):
+    #         standard_toks = proteinseq_toks["toks"] if theme == "protein" else rnaseq_toks["toks"]
+    #         prepend_toks = ("<cls>", "<pad>", "<eos>", "<unk>")
+    #         append_toks = ("<mask>",)
+    #         prepend_bos = True
+    #         append_eos = False
+    #         use_msa = True
+    #     else:
+    #         raise ValueError("Unknown architecture selected")
+    #     return cls(
+    #         standard_toks, prepend_toks, append_toks, prepend_bos, append_eos, use_msa
+    #     )
 
 
 class BatchConverter(object):
@@ -175,11 +223,12 @@ class BatchConverter(object):
 
     def __init__(self, alphabet):
         self.alphabet = alphabet
+        self.k_mer = self.alphabet.k_mer
 
     def __call__(self, raw_batch: Sequence[Tuple[str, str]]):
         # RoBERTa uses an eos token, while ESM-1 does not.
         batch_size = len(raw_batch)
-        max_len = max(len(seq_str) for _, seq_str in raw_batch)
+        max_len = max(len(seq_str) // self.k_mer for _, seq_str in raw_batch)
         tokens = torch.empty(
             (
                 batch_size,
@@ -199,16 +248,17 @@ class BatchConverter(object):
             if self.alphabet.prepend_bos:
                 tokens[i, 0] = self.alphabet.cls_idx
             seq = torch.tensor(
-                [self.alphabet.get_idx(s) for s in seq_str], dtype=torch.int64
+                #[self.alphabet.get_idx(s) for s in seq_str], dtype=torch.int64
+                [self.alphabet.get_idx(seq_str[i:i + self.k_mer]) for i in range(0, len(seq_str), self.k_mer)], dtype=torch.int64
             )
             tokens[
                 i,
-                int(self.alphabet.prepend_bos) : len(seq_str)
-                + int(self.alphabet.prepend_bos),
+                int(self.alphabet.prepend_bos) : len(seq_str) // self.k_mer
+                                                 + int(self.alphabet.prepend_bos),
             ] = seq
             if self.alphabet.append_eos:
                 tokens[
-                    i, len(seq_str) + int(self.alphabet.prepend_bos)
+                    i, len(seq_str) // self.k_mer + int(self.alphabet.prepend_bos)
                 ] = self.alphabet.eos_idx
 
         return labels, strs, tokens

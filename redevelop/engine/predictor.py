@@ -166,16 +166,51 @@ def do_prediction(
                             os.makedirs(save_predCT_dir)
                         matrix2ct(post_without_mlets_numpy, seq, id, save_predCT_dir, threshold=threshold, with_post=False, nc=allow_noncanonical_pairs)
 
+                        # generate Graph View
+                        if allow_visualization:
+                            save_predGraphView_dir = os.path.join(cfg.SOLVER.OUTPUT_DIR, "pred_graph_view")
+                            if not os.path.exists(save_predGraphView_dir):
+                                os.makedirs(save_predGraphView_dir)
+
+                            vis_tool_path = os.path.join(work_dir, "utils", "rna_ss", "VARNAv3-93.jar")
+                            nc_suffix = "_nc" if allow_noncanonical_pairs else ""
+                            # no multiplets
+                            subprocess.Popen(
+                                ["java", "-cp", vis_tool_path, "fr.orsay.lri.varna.applications.VARNAcmd",
+                                 '-i', os.path.join(save_predCT_dir, id + '.ct'),
+                                 '-o',
+                                 os.path.join(save_predGraphView_dir, id + '_no_multiplets{}.png'.format(nc_suffix)),
+                                 # radiate_
+                                 '-algorithm', 'radiate', '-resolution', '8.0', '-bpStyle', 'lw'],
+                                stderr=subprocess.STDOUT, stdout=subprocess.PIPE).communicate()[0]
+                            # with multiplets
+                            aux_BPs = []
+                            for mbp in multiplet_list:
+                                aux_BPs.append("({},{}):color=#00FF00".format(mbp[0], mbp[1]))
+                            aux_BPs = ";".join(aux_BPs)
+                            print("auxBPs:{}".format(aux_BPs))
+                            subprocess.Popen(
+                                ["java", "-cp", vis_tool_path, "fr.orsay.lri.varna.applications.VARNAcmd",
+                                 '-i', os.path.join(save_predCT_dir, id + '.ct'),
+                                 '-o', os.path.join(save_predGraphView_dir, id + '_full{}.png'.format(nc_suffix)),
+                                 # radiate_
+                                 '-algorithm', 'radiate', '-resolution', '8.0', '-bpStyle', 'lw', '-auxBPs',
+                                 aux_BPs],
+                                stderr=subprocess.STDOUT, stdout=subprocess.PIPE).communicate()[0]
+
 
                     elif key == "representations":
-                        pd_numpy = pds[i][1:1 + engine.state.output["length"][i]]
-                        print(pd_numpy.shape)
-                        if pd_numpy.shape[0] != engine.state.output["length"][i]:
-                            raise Exception
-                        # CJY
-                        if save_embeddings_format == "mean":
+                        # if pd_numpy.shape[0] != engine.state.output["length"][i]:
+                        #     raise Exception
+                        if save_embeddings_format == "raw":
+                            pd_numpy = pds[i][1:1 + engine.state.output["length"][i]]
+                        elif save_embeddings_format == "mean":
+                            pd_numpy = pds[i][1:1 + engine.state.output["length"][i]]
                             pd_numpy = pd_numpy.mean(dim=0)   # mean  along sequence direction
+                        elif save_embeddings_format == "bos":
+                            pd_numpy = pds[i][0]
                         pd_numpy = pd_numpy.numpy()
+                        print("saved embedding shape: {}".format(pd_numpy.shape))
 
                     if save_frequency == 1:
                         #print(save_pd_dir)
@@ -299,3 +334,4 @@ def postprocess(prob_map, seq, threshold=0.5, allow_nc=True):
     pred_map_without_multiplets = pred_map * mask_map
 
     return pred_map, pred_map_without_multiplets, multiplet_list
+

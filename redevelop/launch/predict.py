@@ -113,7 +113,7 @@ def main():
         "--save_embeddings", action='store_true'
     )
     parser.add_argument(
-        "--save_embeddings_format", default="raw", choices=["raw", "mean"]
+        "--save_embeddings_format", default="raw", choices=["raw", "bos", "mean"]
     )
     parser.add_argument(
         "--save_file_prefix", default="", type=str

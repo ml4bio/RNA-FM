@@ -51,6 +51,7 @@ class BatchConverter(object):
         :param data_type: seq, msa
         """
         self.alphabet = alphabet
+        self.k_mer = self.alphabet.k_mer
         self.data_type = data_type.split("+")
 
     def __call__(self, raw_data, raw_anns=None):
@@ -73,7 +74,7 @@ class BatchConverter(object):
                 data["token"] = tokens
                 if key == "seq":
                     data["depth"] = [1] * len(strs)
-                    data["length"] = [len(s) for s in strs]
+                    data["length"] = [len(s) // self.k_mer for s in strs]
                 elif key == "msa":
                     data["depth"] = []
                     data["length"] = []
@@ -114,7 +115,13 @@ class BatchConverter(object):
     def __call_seq__(self, raw_batch: Sequence[Tuple[str, str]]):
         # RoBERTa uses an eos token, while ESM-1 does not.
         batch_size = len(raw_batch)
-        max_len = max(len(seq_str) for _, seq_str in raw_batch)
+        #max_len = max(len(seq_str) // self.k_mer for _, seq_str in raw_batch)
+        len_list = []
+        for _, seq_str in raw_batch:
+            if len(seq_str) % self.k_mer != 0:
+                raise Exception("Sequence Length {} must be the multiple of {}".format(len(seq_str), self.k_mer))
+            len_list.append(len(seq_str) // self.k_mer)
+        max_len = max(len_list)
         tokens = torch.empty(
             (
                 batch_size,
@@ -134,16 +141,17 @@ class BatchConverter(object):
             if self.alphabet.prepend_bos:
                 tokens[i, 0] = self.alphabet.cls_idx
             seq = torch.tensor(
-                [self.alphabet.get_idx(s) for s in seq_str], dtype=torch.int64
+                #[self.alphabet.get_idx(s) for s in seq_str], dtype=torch.int64
+                [self.alphabet.get_idx(seq_str[i:i + self.k_mer]) for i in range(0, len(seq_str), self.k_mer)], dtype=torch.int64
             )
             tokens[
             i,
-            int(self.alphabet.prepend_bos): len(seq_str)
+            int(self.alphabet.prepend_bos): len(seq_str) // self.k_mer
                                             + int(self.alphabet.prepend_bos),
             ] = seq
             if self.alphabet.append_eos:
                 tokens[
-                    i, len(seq_str) + int(self.alphabet.prepend_bos)
+                    i, len(seq_str) // self.k_mer + int(self.alphabet.prepend_bos)
                 ] = self.alphabet.eos_idx
 
         return labels, strs, tokens

@@ -11,3 +11,15 @@ rnaseq_toks = {
     'toks': ['A', 'C', 'G', 'U', 'R', 'Y', 'K', 'M', 'S', 'W', 'B', 'D', 'H', 'V', 'N', '-']
 }
 
+rnaseq_3mer_toks = {
+    'toks': [
+        "GAG", "AAG", "GAA", "CUG", "CAG", "GAU", "AAA", "GUG",
+        "GAC", "AUG", "GCC", "AAC", "GCU", "AAU", "AUC", "UUC",
+        "GGA", "AUU", "GGC", "UUU", "CCA", "AGC", "GCA", "UCU",
+        "CUC", "ACC", "CAA", "CCU", "UCC", "ACA", "UUG", "GUU",
+        "CUU", "UAC", "ACU", "CCC", "UCA", "GUC", "GGU", "CAC",
+        "AGU", "UAU", "AGA", "CAU", "GGG", "UGG", "UGC", "AGG",
+        "UGU", "AUA", "CGC", "UUA", "GCG", "CGG", "CCG", "GUA",
+        "CUA", "ACG", "UCG", "CGA", "CGU", "UGA", "UAA", "UAG",
+    ]
+}
