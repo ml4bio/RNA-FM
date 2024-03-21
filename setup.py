@@ -22,13 +22,14 @@ setup(
     author="CUHK AIH Lab",
     url="https://github.com/ml4bio/RNA-FM",
     license="MIT",
-    packages=["fm", "fm/downstream", "fm/downstream/pairwise_predictor"],
+    packages=["fm", "fm/model", "fm/downstream", "fm/downstream/pairwise_predictor"],
     data_files=[("source_docs/fm", ["LICENSE", "README.md"])],
     zip_safe=True,
     install_requires = [
         'numpy==1.22.0',
-        'pandas==1.3.1',
+        'pandas==1.3.5',
         'tqdm==4.62',
-        'scikit-learn==0.24',
+        'scikit-learn',
+        'ptflops',
     ],
 )

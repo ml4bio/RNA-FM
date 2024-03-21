@@ -18,7 +18,7 @@ def _has_regression_weights(model_name):
     """Return whether we expect / require regression weights;
     Right now that is all models except ESM-1v, ESM-IF, and partially trained ESM2 models"""
     return not ("esm1v" in model_name or "esm_if" in model_name or "270K" in model_name or "500K" in model_name or
-                "checkpoint_best" in model_name or "RNA-FM" in model_name or "CDS-FM" in model_name)   # CJY add our framework,
+                "checkpoint_best" in model_name or "RNA-FM" in model_name or "CDS-FM" in model_name)
 
 
 # def load_model_and_alphabet(model_name):
@@ -160,13 +160,13 @@ def load_fm_model_and_alphabet_hub(model_name, theme="rna"):
         #model_data = load_hub_workaround(url, download_name="RNA-FM_SS-ResNet.pth")
         regression_data = None
         return load_model_and_alphabet_core("rna-fm", model_data, regression_data, theme)
-    elif model_name == "cds_fm_t12":
-        url = f"https://proj.cse.cuhk.edu.hk/rnafm/api/download?filename=file_CDS-FM_pretrained.pth"
-        model_data = load_hub_workaround(url, download_name="file_CDS-FM_pretrained.pth")
+    elif model_name == "mrna_fm_t12":
+        url = f"https://proj.cse.cuhk.edu.hk/rnafm/api/download?filename=file_mRNA-FM_pretrained.pth"
+        model_data = load_hub_workaround(url, download_name="file_mRNA-FM_pretrained.pth")
         # url = f"https://proj.cse.cuhk.edu.hk/rnafm/api/download?filename=RNA-FM_SS-ResNet.pth"
         # model_data = load_hub_workaround(url, download_name="RNA-FM_SS-ResNet.pth")
         regression_data = None
-        return load_model_and_alphabet_core("cds-fm", model_data, regression_data, theme)
+        return load_model_and_alphabet_core("mrna-fm", model_data, regression_data, theme)
     else:
         raise Exception("Unknown model name: {}".format(model_name))
 
@@ -180,11 +180,9 @@ def rna_fm_t12(model_location=None):
         return load_fm_model_and_alphabet_hub("rna_fm_t12", theme="rna")
 
 
-def cds_fm_t12(model_location=None):
-    # model_location = "/mnt/nas/user/chenjiayang/Models/NM-CDS/RefSeq-CDS-3mer_ESM1b/checkpoints/CDS-FM_pretrained.pt" #checkpoint_best.pt"
-    # print("pretrained RNA-FM loaded from: {}".format(model_location))
+def mrna_fm_t12(model_location=None):
     if model_location is not None:
         return load_model_and_alphabet_local(model_location, theme="rna-3mer")
     else:
-        return load_fm_model_and_alphabet_hub("cds_fm_t12", theme="rna-3mer")
+        return load_fm_model_and_alphabet_hub("mrna_fm_t12", theme="rna-3mer")
 
