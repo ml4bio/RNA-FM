@@ -82,7 +82,7 @@ You can easily submit jobs on the server and download results from it afterwards
 
 
 ## Quick Start for Further Development. <a name="Quick_Start"></a>
-PyTorch is the prerequisite package which you must have installed to use this repository.
+Python 3.8 (maybe higher version) and PyTorch are the prerequisite packages which you must have installed to use this repository.
 You can install `rna-fm` in your own environment with the following pip command if you just want to
 use the pre-trained language model. 
 you can either install rna-fm from PIPY:
