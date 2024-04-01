@@ -1,7 +1,7 @@
 # RNA-FM
 **Update March 2024**: 
 
-1. [Tutorials for RNA family clustering and RNA type classification](/tutorials/rna_family-clustering_type-classification/rnafm-tutorial-code.ipynb)  [Tutorial video (in Chinese)](https://www.bilibili.com/video/BV11D4215795/?vd_source=a80c1513b9533b969f95a485ab252511). \
+1. [Tutorials for RNA family clustering and RNA type classification](/tutorials/rna_family-clustering_type-classification/rnafm-tutorial-code.ipynb)  [Tutorial video (in Chinese)](https://www.bilibili.com/video/BV11D4215795/?vd_source=a80c1513b9533b969f95a485ab252511).
 2. mRNA-FM, a foundation model pre-trained on coding sequences (CDS) in mRNA is now released! The model can take into CDSs and represent them with contextual embeddings, benefiting mRNA and protein related tasks.
 
 This repository contains codes and pre-trained models for **RNA foundation model (RNA-FM)**.
