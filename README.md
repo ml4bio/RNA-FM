@@ -158,29 +158,101 @@ token_embeddings = results["representations"][12]
 
 ## Citations <a name="citations"></a>
 
-If you find the models useful in your research, we ask that you cite the relevant paper:
+If you find our models useful in your research, we ask that you cite the relevant papers:
+
+For **RNA Structure Prediction**:
 
 ```bibtex
 @article{shen2024accurate,
   title={Accurate RNA 3D structure prediction using a language model-based deep learning approach},
   author={Shen, Tao and Hu, Zhihang and Sun, Siqi and Liu, Di and Wong, Felix and Wang, Jiuming and Chen, Jiayang and Wang, Yixuan and Hong, Liang and Xiao, Jin and others},
   journal={Nature Methods},
-  pages={1--12},
-  year={2024},
-  publisher={Nature Publishing Group US New York}
+  year={2024}
 }
 ```
 
-For more details:
 ```bibtex
-@article{chen2022interpretable,
-  title={Interpretable rna foundation model from unannotated data for highly accurate rna structure and function predictions},
-  author={Chen, Jiayang and Hu, Zhihang and Sun, Siqi and Tan, Qingxiong and Wang, Yixuan and Yu, Qinze and Zong, Licheng and Hong, Liang and Xiao, Jin and King, Irwin and others},
-  journal={arXiv preprint arXiv:2204.00300},
+@article{chen2020rna,
+  title={RNA Secondary Structure Prediction By Learning Unrolled Algorithms},
+  author={Chen, X. and Li, Y. and Umarov, R. and Gao, X. and Song, L.},
+  journal={Proceedings of the Eighth International Conference on Learning Representations (ICLR)},
+  year={2020}
+}
+```
+For **RNA Design and Inverse Folding**:
+```bibtex
+@article{wong2024deep,
+  title={Deep generative design of RNA aptamers using structural predictions},
+  author={Wong, F. and He, D. and Krishnan, A. and Hong, L. and Wang, J. and Hu, Z. and others},
+  journal={Nature Computational Science},
+  year={2024}
+}
+```
+
+```bibtex
+@article{huang2024ribodiffusion,
+  title={RiboDiffusion: Tertiary Structure-based RNA Inverse Folding with Generative Diffusion Models},
+  author={Huang, H. and Lin, Z. and He, D. and Hong, L. and Li, Y.},
+  journal={Bioinformatics},
+  year={2024}
+}
+```
+For **RNA-Protein Interaction (RPI) Prediction**:
+
+```bibtex
+@article{wei2023rna,
+  title={RNA-Protein Interaction Prediction Based on Deep Learning},
+  author={Wei, J. and Xiao, J. and Chen, S. and Zong, L. and Gao, X. and Li, Y.},
+  journal={Journal Name},
+  year={2023}
+}
+```
+
+```bibtex
+@article{wei2022structure,
+  title={Protein-RNA interaction prediction with deep learning: Structure matters},
+  author={Wei, J. and Chen, S. and Zong, L. and Gao, X. and Li, Y.},
+  journal={Briefing in Bioinformatics},
   year={2022}
 }
 ```
 
+```bibtex
+@article{lam2019deep,
+  title={A deep learning framework to predict binding preference of RNA constituents on protein surface},
+  author={Lam, J. et al.},
+  journal={Nature Communications},
+  year={2019}
+}
+```
+For **Databases and Resources**:
+```bibtex
+@article{wei2024pronetdb,
+  title={ProNet DB: A proteome-wise database for protein surface property representations and RNA-binding profiles},
+  author={Wei, J. et al.},
+  journal={Database},
+  year={2024}
+}
+```
+For **Single-Cell RNA Sequencing Analysis**:
+```bibtex
+@article{han2022self,
+  title={Self-supervised contrastive learning for integrative single cell RNA-seq data analysis},
+  author={Han, W., Cheng, Y., Chen, J., Zhong, H., Hu, Z., Chen, S., Zong, L., Hong, L., Chan, T.F., King, I., Gao, X., Li,Y.},
+  journal={Briefing in Bioinformatics},
+  year={2022}
+}
+```
+
+For **Drug Discovery**:
+```bibtex
+@article{fan2022conserved,
+  title={The highly conserved RNA-binding specificity of nucleocapsid protein facilitates the identification of drugs with broad anti-coronavirus activity},
+  author={Fan,S., Sun,W., Fan,L., Wu,N., Ma,H., Chen,S., Li,Z., Li,Y., Zhang,J., Yan,J.},
+  journal={Computational and Structural Biotechnology Journal},
+  year={2022}
+}
+```
 The model of this code builds on the [esm](https://github.com/facebookresearch/esm) sequence modeling framework. 
 And we use [fairseq](https://github.com/pytorch/fairseq) sequence modeling framework to train our RNA language modeling.
 We very appreciate these two excellent works!
