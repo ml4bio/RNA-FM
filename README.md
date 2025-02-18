@@ -253,6 +253,8 @@ For **Drug Discovery**:
   year={2022}
 }
 ```
+We appreciate your support in citing our work!
+
 The model of this code builds on the [esm](https://github.com/facebookresearch/esm) sequence modeling framework. 
 And we use [fairseq](https://github.com/pytorch/fairseq) sequence modeling framework to train our RNA language modeling.
 We very appreciate these two excellent works!
