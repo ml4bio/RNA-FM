@@ -4,7 +4,7 @@ import torch
 
 
 if __name__=="__main__":
-    #path= "/data/home/chenjiayang/projects/RNA-FM/redevelop/pretrained/Models/SS/RNA-FM-ResNet_PDB-All.pth"
+    #path= "/path/to/pretrained/model"
     model, alphabet = fm.downstream.build_rnafm_resnet(type="ss") #, model_location=path)
     batch_converter = alphabet.get_batch_converter()
     model.eval()  # disables dropout for deterministic results
