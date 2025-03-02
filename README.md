@@ -1,5 +1,14 @@
-# RNA-FM: The RNA Foundation Model for Integrated RNA Analysis and Design
+# RNA-FM: The RNA Foundation Model
 [![Pic](./docs/pics/RNA-FM.png)](https://proj.cse.cuhk.edu.hk/rnafm/#/)
+
+[![arXiv](https://img.shields.io/badge/arXiv-2204.00300-b31b1b.svg)](https://arxiv.org/abs/2204.00300)
+[![Nature Methods](https://img.shields.io/badge/Nature_Methods-10.1038/s41592--024--02487--0-1f77b4.svg)](https://www.nature.com/articles/s41592-024-02487-0)
+[![Bioinformatics](https://img.shields.io/badge/Bioinformatics-10.1093/bioinformatics/btab616-0887f7.svg)](https://academic.oup.com/bioinformatics/article/40/Supplement_1/i347/7700903)
+[![Nature Computational Science](https://img.shields.io/badge/Nature_Computational_Science-10.1038/s43588--024--00720--6-1f77b4.svg)](https://www.nature.com/articles/s43588-024-00720-6)
+[![RNA-FM Server](https://img.shields.io/badge/RNA_FM%20Server-Running-green.svg)](https://proj.cse.cuhk.edu.hk/rnafm/#/)
+[![RNA-FM Server](https://img.shields.io/badge/RhoFold%20Server-Running-green.svg)](https://proj.cse.cuhk.edu.hk/aihlab/RhoFold/#/)
+
+
 **Update March 2024**  
 1. **Tutorials**  
    - [Tutorial for RNA family clustering and RNA type classification](./tutorials/rna_family-clustering_type-classification/rnafm-tutorial-code.ipynb)  
@@ -7,8 +16,6 @@
 2. **mRNA-FM**  
    - A foundation model pre-trained on coding sequences (CDS) is now released!  
    - `mRNA-FM` can tokenize CDS (3-mer) and represent them with contextual embeddings, benefiting mRNA- and protein-related tasks.  
-
-[//]: # (---)
 
 ## Introduction
 
@@ -34,7 +41,7 @@ These tools work in concert with RNA-FM to **predict RNA structures from sequenc
 ```
 </details>
 
-<details open><summary><b>Table of contents</b></summary>
+<details open><summary><b>Table of Contents</b></summary>
 
 - [Introduction](#introduction)
 - [RNA-FM and Related Tool](#RNA-FM-and-Related-Tool)
@@ -74,6 +81,9 @@ These tools work in concert with RNA-FM to **predict RNA structures from sequenc
 
   <details><summary>Click to expand RNA-FM details</summary>
 
+  [![CUHKServer](https://img.shields.io/badge/CUHK%20Server-Running-green.svg)](https://proj.cse.cuhk.edu.hk/rnafm/#/)
+  [![arXiv](https://img.shields.io/badge/arXiv-2204.00300-b31b1b.svg)](https://arxiv.org/abs/2204.00300)
+    
     RNA-FM is pre-trained on massive RNA sequence data (RNAcentral) to produce contextual embeddings. These embeddings fuel structure-related tasks (e.g., secondary structure prediction, 3D distance/closeness prediction) and function-related tasks (e.g., UTR function, RNA-protein interaction). The RNA-FM model (12-layer Transformer) is at the core of both pre-training and fine-tuning stages, providing generalizable representations. Downstream, specialized tools (RhoFold, RiboDiffusion, RhoDesign) leverage RNA-FM for end-to-end RNA engineering.
   
   [![RNA-FM Overview](./docs/pics/overview.png)](https://github.com/ml4bio/RNA-FM)
@@ -87,6 +97,9 @@ These tools work in concert with RNA-FM to **predict RNA structures from sequenc
 - [**RhoFold (Tertiary Structure Prediction)**](https://github.com/ml4bio/RhoFold) – An RNA-FM–powered predictor for RNA 3D structures. Given an RNA sequence, RhoFold rapidly predicts its tertiary structure (3D coordinates in PDB format) along with the secondary structure (CT file) and per-residue confidence scores. It achieves high accuracy on RNA 3D benchmarks by combining RNA-FM embeddings with a structure prediction network, significantly outperforming prior methods in the RNA-Puzzles challenge.
 
   <details><summary>Click to expand RhoFold details</summary>
+  
+    [![CUHKServer](https://img.shields.io/badge/CUHK%20Server-Running-green.svg)](https://proj.cse.cuhk.edu.hk/aihlab/RhoFold/)
+    [![Nature Methods](https://img.shields.io/badge/Nature_Methods-10.1038/s41592--024--02487--0-1f77b4.svg)](https://www.nature.com/articles/s41592-024-02487-0)
 
     RhoFold leverages the powerful embeddings from RNA-FM to revolutionize RNA tertiary structure prediction. By combining deep learning with structural biology principles, RhoFold translates RNA sequences directly into accurate 3D coordinates. The model employs a multi-stage architecture that first converts RNA-FM's contextual representations into distance maps and torsion angles, then assembles these into complete three-dimensional structures. Unlike previous approaches that often struggle with RNA's complex folding landscapes, RhoFold's foundation model approach captures subtle sequence-structure relationships, enabling state-of-the-art performance on challenging benchmarks like RNA-Puzzles. The system works in both single-sequence mode for rapid predictions and can incorporate multiple sequence alignments (MSA) when higher accuracy is needed, making it versatile for various research applications from small RNAs to complex ribozymes and riboswitches.
 
@@ -103,6 +116,8 @@ These tools work in concert with RNA-FM to **predict RNA structures from sequenc
 
   <details><summary>Click to expand RiboDiffusion details</summary>
 
+  [![Bioinformatics](https://img.shields.io/badge/Bioinformatics-10.1093/bioinformatics/btab616-0887f7.svg)](https://academic.oup.com/bioinformatics/article/40/Supplement_1/i347/7700903)
+
     RiboDiffusion represents a breakthrough in RNA inverse folding through diffusion-based generative modeling. While traditional RNA design methods often struggle with the vast sequence space, RiboDiffusion employs a novel approach inspired by recent advances in generative AI. Starting with random noise, the model iteratively refines RNA sequences to conform to target 3D backbones through a carefully controlled diffusion process. This approach allows RiboDiffusion to explore diverse sequence solutions while maintaining structural fidelity, a critical balance in biomolecular design. The diffusion framework inherently provides sequence diversity, enabling researchers to generate and test multiple candidate designs that all satisfy structural constraints. Published benchmarks demonstrate that RiboDiffusion achieves superior sequence recovery rates compared to previous methods, making it particularly valuable for designing functional RNAs like riboswitches, aptamers, and other structured elements where sequence-structure relationships are crucial.
 
   [![Overview](https://github.com/ml4bio/RiboDiffusion/raw/main/fig/pipeline.png)](https://github.com/ml4bio/RiboDiffusion)
@@ -116,6 +131,8 @@ These tools work in concert with RNA-FM to **predict RNA structures from sequenc
 - [**RhoDesign (Inverse Folding – Deterministic)**](https://github.com/ml4bio/RhoDesign) – A deterministic geometric deep learning model for RNA design. RhoDesign uses graph neural networks (GVP) and Transformers to directly decode sequences for a given 3D structure (optionally incorporating secondary structure constraints). It achieves state-of-the-art accuracy in matching target structures, with sequence recovery rates exceeding 50% on standard benchmarks (nearly double traditional methods) and the highest structural fidelity (TM-scores) among current solutions.
 
   <details><summary>Click to expand RhoDesign details</summary>
+
+    [![Nature Computational Science](https://img.shields.io/badge/Nature_Computational_Science-10.1038/s43588--024--00720--6-1f77b4.svg)](https://www.nature.com/articles/s43588-024-00720-6)
 
   RhoDesign introduces a deterministic approach to RNA inverse folding using geometric deep learning. Unlike diffusion-based methods, RhoDesign directly translates 3D structural information into RNA sequences through a specialized architecture combining Graph Vector Perceptrons (GVP) and Transformer networks. This architecture effectively captures both local geometric constraints and global structural patterns in RNA backbones. RhoDesign can incorporate optional secondary structure constraints, allowing researchers to specify certain base-pairing patterns while letting the model optimize the remaining sequence. Benchmark tests demonstrate that RhoDesign achieves remarkable sequence recovery rates exceeding 50% on standard datasets—nearly double the performance of traditional methods. Moreover, the designed sequences exhibit the highest structural fidelity (as measured by TM-score) among current approaches. This combination of accuracy and efficiency makes RhoDesign particularly suitable for precision RNA engineering applications where structural integrity is paramount.
 
@@ -133,25 +150,40 @@ These tools work in concert with RNA-FM to **predict RNA structures from sequenc
 
 ## Applications
 
-Our RNA-FM ecosystem has broad applications in:
+The RNA-FM ecosystem unlocks a broad range of applications across biotechnology and research:
 
-- **RNA Therapeutics & Drug Design**  
-  - Accelerate development of mRNA vaccines, siRNAs, ribozymes, aptamers.  
-  - Predict structural stability, design new functional motifs *in silico*, and reduce trial-and-error cycles.
+- **RNA Therapeutics & Drug Design**
+  - Accelerate the development of RNA-based therapeutics (e.g. mRNA vaccines, siRNA, aptamers, ribozymes) by rapidly evaluating and optimizing candidate sequences *in silico*.
+  - Predict structural stability and functional motifs of therapeutic RNAs, identify drug-binding pockets on viral RNAs, and **design new RNA molecules** with desired functions to reduce experimental trial-and-error.
+- **Synthetic Biology**
+  - Rationally engineer RNA devices such as riboswitches, sensors, and logic circuits. The pipeline can propose sequence variants that achieve a desired structural change in response to stimuli.
+  - Use **RiboDiffusion** or **RhoDesign** to generate novel RNA sequences for a target 3D structure (ensuring the molecule folds into a required shape), then validate the design by predicting its structure with **RhoFold**. This streamlines the build-test cycle for novel RNA-based components in synthetic biology.
+- **Functional RNA Analysis & Genomics**
+  - Leverage RNA-FM’s embeddings to cluster and classify RNAs by family, discover evolutionary relationships, and annotate non-coding RNAs in genomic data. Complex RNAs with unknown function can be characterized by similarity in embedding space to known classes.
+  - Explore viral RNAs (e.g., SARS-CoV-2 genome elements) to identify conserved structural regions or potential targets for antiviral compounds. The ability to predict structures and interactions helps in understanding RNA viruses and non-coding elements in the genome that could be drug targets or biomarkers.
 
-- **Synthetic Biology**  
-  - Rationally engineer riboswitches, RNA sensors, or logic circuits.  
-  - Generate candidate sequences with **RiboDiffusion** or **RhoDesign**, then confirm 3D structures using **RhoFold**.
+*(Beyond these, our tools also lower barriers in **education and exploratory research** – students and scientists can easily experiment with RNA structure prediction or design via our user-friendly web server and notebooks, obtaining results in minutes.)*
 
-- **Functional RNA Analysis & Genomics**  
-  - Leverage RNA-FM embeddings for RNA family clustering, classification, and annotation.  
-  - Explore viral RNA architectures (e.g., SARS-CoV-2) and potential drug-binding sites.
+With the surging interest in RNA technologies (from RNAi therapeutics to RNA vaccines), the RNA-FM ecosystem provides a timely platform to **streamline RNA discovery and engineering**. Its versatile applications span both academia and industry, accelerating innovation in genomics, drug development, and synthetic biology.
 
-- **Education & Exploratory Research**  
-  - Easily access advanced RNA AI through servers and notebooks.  
-  - Visualize embeddings, predict structures, or design candidate RNAs in minutes.
+### Integration with RhoFold for RNA Structure Prediction
 
-With the rapid rise of RNA-based technologies (e.g., mRNA vaccines), these **scientific and commercial** avenues are expanding quickly. Our integrated pipeline aims to streamline the design-build-test cycle for RNA, fostering innovation in both academic and industrial settings.
+RNA-FM is a core component of **RhoFold+**, an accurate RNA 3D structure prediction method (analogous to AlphaFold for RNA). RhoFold+ uses the pretrained RNA-FM as its sequence encoder – transforming input RNA sequences into **evolutionarily and structurally informed embeddings**. These RNA-FM embeddings, together with (optionally) multiple sequence alignment (MSA) features, are fed into RhoFold’s structure prediction network (dubbed Rhoformer). Rhoformer then iteratively refines the representation and passes it to a geometry-aware structure module (with invariant point attention) that predicts the 3D coordinates of the RNA. In this workflow, RNA-FM provides the language-model prior, effectively telling RhoFold which nucleotide positions are likely paired or structurally important based on learned sequence patterns. This design proved highly successful: **RhoFold+ achieved state-of-the-art accuracy in RNA tertiary structure prediction**, as evidenced by winning performances in RNA-Puzzles and CASP15 RNA categories. It can generate reliable RNA 3D models even **from a single sequence**, overcoming the limited availability of homologous sequences for many RNAs. An online RhoFold server is available for users to predict RNA structures using RNA-FM embeddings under the hood.
+
+**Usage**: To predict an RNA structure with RhoFold+, one provides the RNA sequence (and optionally an MSA). The RNA-FM model embedded in RhoFold+ will generate sequence embeddings that inform the folding prediction. RhoFold outputs a PDB 3D structure and base-pairing (secondary structure) information. Internally, RNA-FM helps generalize across RNA families – RhoFold+ can even predict structures of novel RNA families that were unseen during training, thanks to RNA-FM’s learned generalizable features. This integration showcases how a foundation model can be fine-tuned (or coupled with task-specific models) to achieve cutting-edge results in a challenging structural biology task.
+
+### Integration with RiboDiffusion and RhoDesign for RNA Design
+
+Beyond structure prediction, RNA-FM also plays a role in **RNA design** – the inverse folding problem of finding sequences that fold into a desired structure. Two complementary approaches in the RNA-FM ecosystem are **RiboDiffusion** and **RhoDesign**:
+
+- **RiboDiffusion** is a generative diffusion model for RNA inverse folding. It conditions a diffusion process on a target 3D backbone and gradually “denoises” into a sequence that is predicted to fold into that structure. While RiboDiffusion’s architecture mainly consists of a geometric GNN and a sequence transformer specific to the diffusion model, it leverages RNA-FM indirectly via RhoFold. In the training phase, RiboDiffusion **augments its training data by using RhoFold (with RNA-FM) to predict structures for many RNA sequences**, obtaining additional structure–sequence pairs beyond the experimentally known ones. These extra samples (RNAcentral sequences folded by RhoFold) improve the model’s ability to generalize. During inference, RiboDiffusion can also use RhoFold to validate that the sequences it generates indeed fold into the desired structure. This two-step workflow (design candidate with RiboDiffusion, then fold with RhoFold) ensures the designed sequences are evaluated and filtered using the RNA-FM-informed structure predictor. RiboDiffusion has demonstrated state-of-the-art performance in RNA inverse folding, outperforming previous methods in success rate and diversity of designs.
+
+- **RhoDesign** is a Transformer encoder–decoder model for structure-conditioned RNA sequence design (a supervised learning approach). It directly learns to generate RNA sequences given a target secondary and/or tertiary structure input. RhoDesign uses a **geometric vector perceptron (GVP) encoder** to embed the 3D structural context of each nucleotide (nodes in a 3D graph), and a Transformer decoder to output sequences nucleotide by nucleotide. Importantly, RhoDesign was trained not only on real RNA structures from PDB but also on **predicted structures from RhoFold** to expand the training set. By utilizing RhoFold (powered by RNA-FM) to generate additional training examples, RhoDesign achieved higher sequence recovery rates – i.e., it can redesign known RNA structures with sequences closer to the natural ones. In practice, given a target RNA structure (from experiment or modeling), RhoDesign’s encoder captures the geometric features (distances, orientations, etc.), and its decoder produces candidate sequences that are expected to fold into that structure. This method complements RiboDiffusion by offering a fast, one-shot generation based on learned mappings, whereas diffusion provides a stochastic search. Together, these tools illustrate how RNA-FM and its downstream models form a **cohesive workflow**: one can **predict an RNA structure from sequence (RhoFold)** and also **design sequences for a given structure (RhoDesign or RiboDiffusion)**, with RNA-FM providing a unifying knowledge base throughout the process.
+
+In summary, **RNA-FM, RhoFold, RiboDiffusion, and RhoDesign constitute an integrated ecosystem** for RNA biology. Researchers can obtain RNA-FM embeddings for any sequence, use RhoFold+ (with those embeddings) to predict 3D structure, and if needed, use RhoDesign or RiboDiffusion (with RhoFold’s assistance) to inversely design new RNA sequences for a target structure. This end-to-end capability – from sequence to structure to novel sequence – underscores the power of foundation models: RNA-FM generalizes across RNA sequence space, enabling both predictive and generative RNA tasks to reach new levels of accuracy and scale.
+
+
+
 
 ---
 
@@ -351,6 +383,8 @@ Each project includes:
   - `inference.py` takes a PDB and (optionally) a 2D structure/contact map → outputs designed sequences.  
   - The GVP-based approach can incorporate partial constraints, advanced sampling, etc.
 
+
+
 For further details, see each repo’s documentation or the notebooks in the `tutorials` folder.
 
 ---
@@ -419,7 +453,8 @@ For further details, see each repo’s documentation or the notebooks in the `tu
 ## Citations
 
 If you use RNA-FM or any components of this ecosystem in your research, please cite the relevant papers. Below is a collection of key publications (in BibTeX format) covering the foundation model and associated tools:
-<details><summary>Click to expand BibTeX citations</summary>
+
+<details open><summary><b>BibTeX Citations</b></summary>
 
 ### RNA-FM & RNA Structure Predictions
 
@@ -437,11 +472,7 @@ If you use RNA-FM or any components of this ecosystem in your research, please c
   journal={Nature Methods},
   year={2024}
 }
-```
 
-### RNA Secondary Structure
-
-```bibtex
 @article{chen2020rna,
   title={RNA Secondary Structure Prediction By Learning Unrolled Algorithms},
   author={Chen, X. and Li, Y. and Umarov, R. and Gao, X. and Song, L.},
