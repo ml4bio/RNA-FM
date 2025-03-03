@@ -19,7 +19,7 @@
 
 ## Introduction
 
-**RNA-FM** (RNA Foundation Model) is a state-of-the-art **pretrained language model for RNA sequences**, serving as the cornerstone of an integrated RNA research ecosystem. Trained on **23+ million non-coding RNA (ncRNA) sequences** via self-supervised learning, RNA-FM captures rich structural and functional signals from RNA sequences *without* requiring experimental labels. Consequently, RNA-FM provides **general-purpose RNA embeddings** that can be applied to a broad range of downstream tasks—such as secondary and tertiary structure prediction, RNA family clustering, and functional RNA analysis.
+[**RNA-FM** (RNA Foundation Model)](https://arxiv.org/abs/2204.00300) is a state-of-the-art **pretrained language model for RNA sequences**, serving as the cornerstone of an integrated RNA research ecosystem. Trained on **23+ million non-coding RNA (ncRNA) sequences** via self-supervised learning, RNA-FM captures rich structural and functional signals from RNA sequences *without* requiring experimental labels. Consequently, RNA-FM provides **general-purpose RNA embeddings** that can be applied to a broad range of downstream tasks—such as secondary and tertiary structure prediction, RNA family clustering, and functional RNA analysis.
 
 Originally introduced in [*Nature Methods*](https://arxiv.org/abs/2204.00300) as a foundational model for RNA biology, RNA-FM outperforms all tested single-sequence RNA language models across diverse RNA structure and function benchmarks, enabling unprecedented accuracy in RNA analysis. Building upon this backbone, our team developed an **integrated RNA pipeline** that includes:
 
