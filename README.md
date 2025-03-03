@@ -46,9 +46,10 @@ These tools work in concert with RNA-FM to **predict RNA structures from sequenc
 - [Introduction](#introduction)
 - [RNA-FM and Related Tools](#rna-fm-and-related-tools)
   - [RNA-FM (Foundation Model)](#rna-fm-foundation-model)
-  - [RhoFold (Tertiary Structure Prediction)](#rhofold-tertiary-structure-prediction)
-  - [RiboDiffusion (Inverse Folding)](#ribodiffusion-inverse-folding)
-  - [RhoDesign (Inverse Folding)](#rhodesign-inverse-folding)
+  - [Downstream Tools](#downstream-tools)
+    - [RhoFold (Tertiary Structure Prediction)](#rhofold-tertiary-structure-prediction)
+    - [RiboDiffusion (Inverse Folding – Diffusion)](#ribodiffusion-inverse-folding--diffusion)
+    - [RhoDesign (Inverse Folding – Deterministic)](#rhodesign-inverse-folding--deterministic)
 - [Applications](#applications)
   - [RNA Therapeutics & Drug Design](#rna-therapeutics--drug-design)
   - [Synthetic Biology & Advanced RNA Engineering](#synthetic-biology--advanced-rna-engineering)
@@ -58,8 +59,7 @@ These tools work in concert with RNA-FM to **predict RNA structures from sequenc
   - [Setup Environment with Conda](#setup-environment-with-conda)
   - [Quick Start Usage](#quick-start-usage)
   - [Online Server](#online-server)
-- [Further Development](#further-development)
-  - [Python API](#python-api)
+- [Further Development & Python API](#further-development--python-api)
   - [Usage Examples with the Ecosystem](#usage-examples-with-the-ecosystem)
   - [API Reference](#api-reference)
 - [Related RNA Language Models](#related-rna-language-models)
@@ -69,7 +69,7 @@ These tools work in concert with RNA-FM to **predict RNA structures from sequenc
 </details>
 
 ---
-## RNA-FM and Related Tool
+## RNA-FM and Related Tools
 
 **RNA-FM Ecosystem Components**: Our platform comprises four integrated tools, each addressing a critical step in the RNA analysis and design pipeline:
 
@@ -98,7 +98,9 @@ These tools work in concert with RNA-FM to **predict RNA structures from sequenc
     
   </details>
 
-### Downsteam Tools
+### Downstream Tools
+
+#### RhoFold (Tertiary Structure Prediction)
 
 - [**RhoFold (Tertiary Structure Prediction)**](https://github.com/ml4bio/RhoFold) – An RNA-FM–powered predictor for RNA 3D structures. Given an RNA sequence, RhoFold rapidly predicts its tertiary structure (3D coordinates in PDB format) along with the secondary structure (CT file) and per-residue confidence scores. It achieves high accuracy on RNA 3D benchmarks by combining RNA-FM embeddings with a structure prediction network, significantly outperforming prior methods in the RNA-Puzzles challenge.
 
@@ -117,6 +119,7 @@ These tools work in concert with RNA-FM to **predict RNA structures from sequenc
     - 
   </details>
 
+#### RiboDiffusion (Inverse Folding – Diffusion)
 
 - [**RiboDiffusion (Inverse Folding – Diffusion)**](https://github.com/ml4bio/RiboDiffusion) – A diffusion-based inverse folding model for RNA design. Starting from a target 3D backbone structure, RiboDiffusion iteratively generates RNA sequences that fold into that shape. This generative approach yields higher sequence recovery (≈11–16% improvement) than previous inverse folding algorithms, while offering tunable diversity in the designed sequences.
 
@@ -134,6 +137,7 @@ These tools work in concert with RNA-FM to **predict RNA structures from sequenc
 
   </details>
 
+#### RhoDesign (Inverse Folding – Deterministic)
 
 - [**RhoDesign (Inverse Folding – Deterministic)**](https://github.com/ml4bio/RhoDesign) – A deterministic geometric deep learning model for RNA design. RhoDesign uses graph neural networks (GVP) and Transformers to directly decode sequences for a given 3D structure (optionally incorporating secondary structure constraints). It achieves state-of-the-art accuracy in matching target structures, with sequence recovery rates exceeding 50% on standard benchmarks (nearly double traditional methods) and the highest structural fidelity (TM-scores) among current solutions.
 
@@ -215,23 +219,27 @@ These tools work in concert with RNA-FM to **predict RNA structures from sequenc
 Modern biotechnology hinges on precise RNA analysis and design, making **RNA-FM** and its ecosystem highly valuable in both scientific and commercial settings. By enabling rapid, accurate structure prediction, advanced RNA design, and functional insights, our integrated platform serves as an indispensable resource for multiple applications:
 
 ### RNA Therapeutics & Drug Design
+
 In the booming field of RNA therapeutics—spanning mRNA vaccines, siRNA treatments, and aptamer-based diagnostics—speed and accuracy are critical. **RNA-FM** provides:
 - **Accelerated R&D**: Rapidly predict RNA structural stability, identify active motifs, and optimize mRNA constructs to reduce experimental failures.
 - **Target Discovery & Validation**: Model viral RNAs (e.g., SARS-CoV-2) or non-coding RNAs to pinpoint druggable structural pockets, expediting lead identification.
 - **Streamlined Production Pipelines**: De-risk costly development by screening candidate RNA therapeutics *in silico* before in vitro or in vivo testing.
 
 ### Synthetic Biology & Advanced RNA Engineering
+
 Bioengineering initiatives increasingly rely on RNA to build novel biosensors, gene regulators, and molecular circuits:
 - **Tailored RNA Components**: Use **RiboDiffusion** or **RhoDesign** to create bespoke riboswitches, regulatory RNAs, or catalytic motifs. Incorporate new functional domains while preserving structural integrity.
 - **Design-Build-Test Cycle**: Validate newly designed constructs *in silico* with **RhoFold**, reducing iteration time and project costs. This rapid prototyping fosters high-impact synthetic biology discoveries.
 
 ### Functional Genomics & Biomarker Discovery
+
 As large-scale RNA sequencing continues to transform genomics, **RNA-FM** plays a pivotal role in:
 - **Automated RNA Annotation**: Cluster and classify RNAs by leveraging advanced embeddings, revealing novel RNA families, regulatory elements, or potential biomarkers in massive transcriptome datasets.
 - **Predictive Functional Profiling**: Assess expression stability, splicing variants, and RNA-protein interactions to better understand disease mechanisms and identify diagnostic targets.
 - **Therapeutic Target Prioritization**: Combine structure predictions with omics data to prioritize RNA candidates for follow-up validation in oncology, virology, or precision medicine applications.
 
 ### Educational & Exploratory Research
+
 **RNA-FM** not only benefits industry partners but also serves as a powerful academic research tool:
 - **User-Friendly Web Interface**: Gain immediate structural or functional insights without local computing resources, making advanced modeling accessible to educators and students.
 - **Open-Source Community**: Join a growing ecosystem of developers building specialized plugins and analysis tools, fostering transparency and collaborative innovation in RNA research.
@@ -239,12 +247,11 @@ As large-scale RNA sequencing continues to transform genomics, **RNA-FM** plays 
 
 By delivering unprecedented accuracy in RNA structure prediction and design, **RNA-FM** and its companion tools provide a strategic advantage in fields where RNA’s central role is rapidly expanding. This integrated system cuts both time and cost associated with trial-and-error experimentation, thereby unlocking significant value for investors, biotech developers, and academic institutions alike.
 
-
-
-
 ---
 
-## Setup Environment with Conda
+## Setup and Usage
+
+### Setup Environment with Conda
 
 Below, we outline the environment setup for **RNA-FM** and its extended pipeline (e.g., RhoFold) locally.  
 *(If you prefer not to install locally, refer to the [Online Server](#Server) mentioned earlier.)*
@@ -270,10 +277,10 @@ cd ./redevelop
 
 ---
 
-## Quick Start Usage
+### Quick Start Usage
 
 
-### 1. Embedding Generation
+#### 1. Embedding Generation
 
 
 Use **RNA-FM** to extract embeddings for downstream tasks:
@@ -304,7 +311,7 @@ python launch/predict.py \
 
 Remember **mRNA-FM** uses codon tokenization, so each sequence must have a length multiple of 3.
 
-### 2. RNA Secondary Structure Prediction
+#### 2. RNA Secondary Structure Prediction
 
 ```bash
 python launch/predict.py \
@@ -316,7 +323,8 @@ python launch/predict.py \
 
 RNA-FM will output base-pair probability matrices (`.npy`) and secondary structures (`.ct`) to `./results/r-ss`.
 
-### 3. Online Server <a name="Server"></a>
+[//]: # (### 3. Online Server <a name="Server"></a>)
+### Online Server
 
 For those who prefer **not** to install locally, we offer an [RNA-FM server](https://proj.cse.cuhk.edu.hk/rnafm/#/) that:
 - Lets you submit RNA sequences in a web interface.
@@ -368,14 +376,13 @@ print(embeddings.shape)
 For **mRNA-FM**, replace `rna_fm_t12()` with `mrna_fm_t12()` and ensure codon-aligned input sequences.
 
 ---
-
-## Usage Examples with the Ecosystem
+### Usage Examples with the Ecosystem
 
 We recommend exploring the advanced **RhoFold**, **RiboDiffusion**, and **RhoDesign** projects for tasks like 3D structure prediction or RNA design. Below are *brief* usage samples:
 
 <details><summary>Click to expand RNA-FM Ecosystem details</summary>
 
-### RhoFold (Sequence → Structure)
+#### RhoFold (Sequence → Structure)
 
 ```bash
 # Example: Predict 3D structure for an RNA sequence in FASTA.
@@ -392,7 +399,7 @@ python inference.py \
 - `results.npz` (distance/angle predictions + confidence scores)  
 - `log.txt` (run logs, pLDDT, etc.)
 
-### RiboDiffusion (Structure → Sequence)
+#### RiboDiffusion (Structure → Sequence)
 
 ```bash
 cd RiboDiffusion
@@ -403,7 +410,7 @@ CUDA_VISIBLE_DEVICES=0 python main.py \
 
 Generates 5 new sequences matching `R1107.pdb`. Output FASTA files are placed in `exp_inf/fasta/`.
 
-### RhoDesign (Structure → Sequence)
+#### RhoDesign (Structure → Sequence)
 
 ```bash
 cd RhoDesign
@@ -419,7 +426,7 @@ Produces a designed sequence that folds into the target 3D shape, leveraging geo
 
 ---
 
-## API Reference
+### API Reference
 
 Each project includes:
 - **CLI scripts** (`predict.py`, `inference.py`, etc.).
