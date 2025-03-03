@@ -275,7 +275,6 @@ cd ./redevelop
 
    - For **mRNA-FM**, ensure that your input RNA sequences have lengths multiple of 3 (codons) and place the specialized weights for *mRNA-FM* in the same `pretrained` folder.
 
----
 
 ### Quick Start Usage
 
@@ -377,7 +376,6 @@ print(embeddings.shape)
 
 For **mRNA-FM**, replace `rna_fm_t12()` with `mrna_fm_t12()` and ensure codon-aligned input sequences.
 
----
 ### Usage Examples with the Ecosystem
 
 We recommend exploring the advanced **RhoFold**, **RiboDiffusion**, and **RhoDesign** projects for tasks like 3D structure prediction or RNA design. Below are *brief* usage samples:
@@ -425,8 +423,6 @@ python src/inference.py \
 Produces a designed sequence that folds into the target 3D shape, leveraging geometry-based encoding. Adjust temperature or other parameters for more diversity or fidelity.
 
 </details>
-
----
 
 ### API Reference
 
