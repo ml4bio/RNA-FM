@@ -6,7 +6,7 @@
 [![Bioinformatics](https://img.shields.io/badge/Bioinformatics-10.1093/bioinformatics/btab616-0887f7.svg)](https://academic.oup.com/bioinformatics/article/40/Supplement_1/i347/7700903)
 [![Nature Computational Science](https://img.shields.io/badge/Nature_Computational_Science-10.1038/s43588--024--00720--6-1f77b4.svg)](https://www.nature.com/articles/s43588-024-00720-6)
 [![RNA-FM Server](https://img.shields.io/badge/RNA_FM%20Server-Running-green.svg)](https://proj.cse.cuhk.edu.hk/rnafm/#/)
-[![RNA-FM Server](https://img.shields.io/badge/RhoFold%20Server-Running-green.svg)](https://proj.cse.cuhk.edu.hk/aihlab/RhoFold/#/)
+[![RhoFold Server](https://img.shields.io/badge/RhoFold%20Server-Running-green.svg)](https://proj.cse.cuhk.edu.hk/aihlab/RhoFold/#/)
 
 
 **Update March 2024**  
@@ -325,6 +325,8 @@ RNA-FM will output base-pair probability matrices (`.npy`) and secondary structu
 
 [//]: # (### 3. Online Server <a name="Server"></a>)
 ### Online Server
+[![RNA-FM Server](https://img.shields.io/badge/RNA_FM%20Server-Running-green.svg)](https://proj.cse.cuhk.edu.hk/rnafm/#/)
+[![RhoFold Server](https://img.shields.io/badge/RhoFold%20Server-Running-green.svg)](https://proj.cse.cuhk.edu.hk/aihlab/RhoFold/#/)
 
 For those who prefer **not** to install locally, we offer an [RNA-FM server](https://proj.cse.cuhk.edu.hk/rnafm/#/) that:
 - Lets you submit RNA sequences in a web interface.
