@@ -456,62 +456,38 @@ For further details, see each repo’s documentation or the notebooks in the `tu
 
 ## Related RNA Language Models
 
-[//]: # (| Shorthand                                         | Code                                                       | Subject    | Layers | Embed Dim | Max Length | Input  | Token  | Dataset                                  | Description                                                   | Year    | Publisher               |)
-
-[//]: # (|---------------------------------------------------|------------------------------------------------------------|------------|--------|----------|-----------|--------|--------|-------------------------------------------|---------------------------------------------------------------|---------|-------------------------|)
-
-[//]: # (| **[RNA-FM]&#40;https://doi.org/10.48550/arXiv.2204.00300&#41;** | [Yes]&#40;https://github.com/ml4bio/RNA-FM&#41;                    | ncRNA      | 12     | 640      | 1024      | Seq    | base   | RNAcentral19 &#40;23M&#41;                        | The first large-scale, general-purpose RNA language model     | 2022.04 | arXiv/bioRxiv          |)
-
-[//]: # (| [RNABERT]&#40;https://doi.org/10.1093/nargab/lqac012&#41; | [Yes]&#40;https://github.com/mana438/RNABERT&#41;                  | ncRNA      | 6      | 120      | 440       | Seq    | base   | RNAcentral &#40;762k&#41; & Rfam14.3 &#40;partial MSA&#41;| Specialized in structural alignment and clustering            | 2022.02 | NAR Genomics Bioinfo   |)
-
-[//]: # (| [UNI-RNA]&#40;https://doi.org/10.1101/2023.07.11.548588&#41;    | No                                                         | RNA        | 24     | 1280     | ∞         | Seq    | base   | 1B from RNAcentral, nt, GWH               | Larger scale & dataset than RNA-FM; general model             | 2023.07 | bioRxiv                |)
-
-[//]: # (| [RNA-MSM]&#40;https://doi.org/10.1093/nar/gkad1031&#41;   | [Yes]&#40;https://github.com/yikunpku/RNA-MSM&#41;                 | ncRNA      | 12     | 768      | 1024      | MSA    | base   | 4069 families from Rfam14.7               | Uses evolutionary information from MSA                        | 2023.03 | NAR                     |)
-
-[//]: # (| [SpliceBERT]&#40;https://doi.org/10.1101/2023.01.31.526427&#41; | [Yes]&#40;https://github.com/biomedAI/SpliceBERT&#41;             | pre-mRNA   | 6      | 1024     | 512       | Seq    | base   | 2M pre-mRNAs                              | Specialized in RNA splicing                                  | 2023.05 | bioRxiv                |)
-
-[//]: # (| [CodonBERT]&#40;https://doi.org/10.1101/2023.09.09.556981&#41;  | No                                                         | mRNA CDS   | 12     | 768      | 512×2     | Seq    | codon | 10M mRNAs from NCBI                       | Only for coding sequences; tokenized by codon                 | 2023.09 | bioRxiv                |)
-
-[//]: # (| [UTR-LM]&#40;https://doi.org/10.1101/2023.10.11.561938&#41;     | [Yes]&#40;https://github.com/a96123155/UTR-LM&#41;                 | mRNA 5'UTR | 6      | 128      | ∞         | Seq    | base   | 700k 5'UTRs                               | Targets 5'UTR expression-related tasks                       | 2023.10 | bioRxiv                |)
-
-[//]: # (| [3UTRBERT]&#40;https://doi.org/10.1101/2023.09.08.556883&#41;   | [Yes]&#40;https://github.com/yangyn533/3UTRBERT&#41;               | mRNA 3'UTR | 12     | 768      | 512       | Seq    | k-mer  | 20,362 3'UTRs                             | For 3'UTR-mediated gene regulation tasks                     | 2023.09 | bioRxiv                |)
-
-[//]: # (| BigRNA &#40;WIP&#41;                                        | No                                                         | DNA→RNA    | -      | -        | -         | Seq    | -      | Thousands of genome-matched sets          | Tissue-specific expression, splicing, miRNA sites, RBP        | 2023.09 | bioRxiv                |)
-
-[//]: # (---)
-
-| Name | Dataset | Modality | Tokenization | Architecture | Backbone | Pre-training Task | Layers | Model Params | Data Size | Open Source                                        |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |----------------------------------------------------|
-| **[RNA-FM](https://doi.org/10.48550/arXiv.2204.00300)** | ncRNA | Sequence | Base | Enc.only | Transformers | MLM | 12 | 100M | 23M | [Yes](https://github.com/ml4bio/RNA-FM)            |
-| [RNABERT](https://doi.org/10.1093/nargab/lqac012) | ncRNA | Sequence | Base | Enc.only | Transformers | MLM, SAL | 6 | 0.5M | 0.76M | [Yes](https://github.com/mana438/RNABERT)          |
-| [RNA-MSM](https://doi.org/10.1093/nar/gkad1031) | ncRNA | Sequence, MSA | Base | Enc.only | MSA Transformers | MLM | 12 | 95M | 3932 families | [Yes](https://github.com/yikunpku/RNA-MSM)         |
-| [AIDO.RNA](https://doi.org/10.1101/2024.11.28.625345) | ncRNA | Sequence | Base | Enc.only | Transformers | MLM | 32 | 1.6B | 42M | [Yes](https://github.com/genbio-ai/AIDO)           |
-| [ERNIE-RNA](https://doi.org/10.1101/2024.03.17.585376) | ncRNA | Sequence | Base | Enc.only | Transformers | MLM | 12 | 86M | 20.4M | [Yes](https://github.com/Bruce-ywj/ERNIE-RNA)      |
-| [GenerRNA](https://doi.org/10.1371/journal.pone.0310814) | ncRNA | Sequence | BPE | Dec.only | Transformers | CLM | 24 | 350M | 16.09M | [Yes](https://github.com/pfnet-research/GenerRNA)  |
-| [RFamLlama](https://doi.org/10.1093/nar/gkaa1047) | ncRNA | Sequence | Base | Dec.only | Llama | CLM | 6 - 10 | 13M - 88M | 0.6M | [Yes](https://github.com/Rfam)                     |
-| [RNA-km](https://doi.org/10.1101/2024.01.27.577533) | ncRNA | Sequence | Base | Enc.only | Transformers | MLM | 12 | 152M | 23M | [Yes](https://github.com/gongtiansu/RNA-km)        |
-| [RNAErnie](https://doi.org/10.1038/s42256-024-00836-4) | ncRNA | Sequence | Base | Enc.only | Transformers | MLM | 12 | 105M | 23M | [Yes](https://github.com/CatIIIIIIII/RNAErnie)     |
-| [OPED](https://doi.org/10.1038/s42256-023-00739-w) | pegRNA | Sequence | k-mer | Enc.-Dec. | Transformers | Regression | N.A. | N.A. | 40k | [Yes](https://github.com/wenjiegroup/OPED)         |
-| [GARNET](https://doi.org/10.1101/2024.04.05.588317) | rRNA | Sequence | k-mer | Dec.only | Transformers | CLM | 18 | 19M | 89M tokens | [Yes](https://github.com/Doudna-lab/GARNET_DL)     |
-| [IsoCLR](https://doi.org/10.48550/arXiv.2402.05943) | pre-mRNA | Sequence | One-hot | Enc.only | CNN | CL | 8 | 1 - 10M | 1M | [Yes](unknown)                                     |
-| [SpliceBERT](https://doi.org/10.1101/2023.01.31.526427) | pre-mRNA | Sequence | Base | Enc.only | Transformers | MLM | 6 | 20M | 2M | [Yes](https://github.com/chenkenbio/SpliceBERT)    |
-| [Orthrus](https://doi.org/10.1101/2024.10.10.617658) | pre-mRNA | Sequence | Base | Enc.only | Mamba | CL | 3 - 6 | 1 - 10M | 49M | [Yes](https://github.com/bowang-lab/Orthrus)       |
-| [LoRNA](https://doi.org/10.1101/2024.08.26.609813) | pre-mRNA | Sequence | Base | Dec.only | StripedHyena | CL | 16 | 6.5M | 100M | [Yes](https://github.com/goodarzilab/lorna-sh)     |
-| [CodonBERT](https://doi.org/10.1101/2023.09.09.556981) | mRNA CDS | Sequence | Codon | Enc.only | Transformers | MLM, HSP | 12 | 87M | 10M | [Yes](https://github.com/Sanofi-Public/CodonBERT)  |
-| [UTR-LM](https://doi.org/10.1101/2023.10.11.561938) | mRNA 5'UTR | Sequence | Base | Enc.only | Transformers | MLM, SSP, MFE | 6 | 1M | 0.7M | [Yes](https://github.com/a96123155/UTR-LM)         |
-| [3UTRBERT](https://doi.org/10.1101/2023.09.08.556883) | mRNA 3'UTR | Sequence | k-mer | Enc.only | Transformers | MLM | 12 | 86M | 20k | [Yes](https://github.com/yangyn533/3UTRBERT)       |
-| [G4mer](https://doi.org/10.1101/2024.10.01.616124) | mRNA | Sequence | k-mer | Enc.only | Transformers | MLM | 6 | N.A. | N.A. | No                                                 |
-| [HELM](https://doi.org/10.48550/arXiv.2410.12459) | mRNA | Sequence | Codon | Multiple | Multiple | MLM, CLM | Multiple | 50M | 15.3M | No                                                 |
-| [RiNALMo](https://doi.org/10.48550/arXiv.2403.00043) | RNA | Sequence | Base | Enc.only | Transformers | MLM | 33 | 135 - 650M | 36M | [Yes](https://github.com/rjpenic/RiNALMo)          |
-| [UNI-RNA](https://doi.org/10.1101/2023.07.11.548588) | RNA | Sequence | Base | Enc.only | Transformers | MLM | 24 | 400M | 500M | No                                                 |
-| [ATOM-1](https://doi.org/10.1101/2023.12.13.571579) | RNA | Sequence | Base | Enc.-Dec. | Transformers | N.A. | N.A. | N.A. | N.A. | No                                                 |
-| [BiRNA-BERT](https://doi.org/10.1101/2024.07.02.601703) | RNA | Sequence | Base, BPE | Enc.only | Transformers | MLM | 12 | 117M | 36M | [Yes](https://github.com/buetnlpbio/BiRNA-BERT)    |
-| [ChaRNABERT](https://doi.org/10.48550/arXiv.2411.11808) | RNA | Sequence | GBST | Enc.only | Transformers | MLM | 6 - 33 | 8 - 650M | 62M | [Yes](unknown)                                     |
-| [DGRNA](https://doi.org/10.1101/2024.10.31.621427) | RNA | Sequence | Base | Enc.only | Mamba | MLM | 12 | 100M | 100M | No                                                 |
-| [LAMAR](https://doi.org/10.1101/2024.10.12.617732) | RNA | Sequence | Base | Enc.only | Transformers | MLM | 12 | 150M | 15M | [Yes](https://github.com/zhw-e8/LAMAR)             |
-| [OmniGenome](https://doi.org/10.48550/arXiv.2407.11242) | RNA | Sequence, Structure | Base | Enc.only | Transformers | MLM, Seq2Str, Str2Seq | 16 - 32 | 52M - 186M | 25M | [Yes](https://github.com/yangheng95/OmniGenBench)  |
-| [PlantRNA-FM](https://doi.org/10.1038/s42256-024-00946-z) | RNA | Sequence, Structure | Base | Enc.only | Transformers | MLM, SSP, CLS | 12 | 35M | 25M | [Yes](https://huggingface.co/yangheng/PlantRNA-FM) |
-| [MP-RNA](https://doi.org/10.18653/v1/2024.findings-emnlp.304) | RNA | Sequence, Structure | Base | Enc.only | Transformers | SSP, SNMR, MRLM | 12 | 52M - 186M | 25M | [Yes](https://github.com/yangheng95/OmniGenBench)  |
+| Name | Dataset | Modality | Tokenization | Architecture | Backbone | Pre‑training Task | Layers | Model Params | Data Size | Code                                                       | Weights | Data | License |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |------------------------------------------------------------| --- | --- | --- |
+| **[RNA‑FM](https://doi.org/10.48550/arXiv.2204.00300)** | ncRNA | Sequence | Base | Enc‑only | Transformer | MLM | 12 | 100 M | 23 M | [GitHub](https://github.com/ml4bio/RNA-FM)                 | [HuggingFace](https://huggingface.co/ml4bio/RNA-FM) | RNAcentral  | MIT |
+| [RNABERT](https://doi.org/10.1093/nargab/lqac012) | ncRNA | Sequence | Base | Enc‑only | Transformer | MLM / SAL | 6 | 0.5 M | 0.76 M | [GitHub](https://github.com/mana438/RNABERT)               | [Drive](https://drive.google.com/drive/folders/1j4DBx3W489MQTDjVT6hmsycCy0UON860) | Rfam 14.3  | MIT |
+| [RNA‑MSM](https://doi.org/10.1093/nar/gkad1031) | ncRNA | Seq + MSA | Base | Enc‑only | MSA‑Transformer | MLM | 12 | 95 M | 3932 families | [GitHub](https://github.com/yikunpku/RNA-MSM)              | [Drive](https://pan.baidu.com/s/1VuoAoXjkR517SUOOxGGnNQ) | Rfam 14.7  | MIT |
+| [AIDO.RNA](https://doi.org/10.1101/2024.11.28.625345) | ncRNA | Sequence | Base | Enc‑only | Transformer | MLM | 32 | 1.6 B | 42 M | [GitHub](https://github.com/genbio-ai/AIDO)                | [HuggingFace](https://huggingface.co/genbio-ai/AIDO.RNA-1.6B) | Public ncRNA mix | Apache‑2.0 |
+| [ERNIE‑RNA](https://doi.org/10.1101/2024.03.17.585376) | ncRNA | Sequence | Base | Enc‑only | Transformer | MLM | 12 | 86 M | 20.4 M | [GitHub](https://github.com/Bruce-ywj/ERNIE-RNA)           | [GitHub](https://github.com/Bruce-ywj/ERNIE-RNA) | Rfam + RNAcentral | MIT |
+| [GenerRNA](https://doi.org/10.1371/journal.pone.0310814) | ncRNA | Sequence | BPE | Dec‑only | Transformer | CLM | 24 | 350 M | 16.09 M | [GitHub](https://github.com/pfnet-research/GenerRNA)       | [HuggingFace](https://huggingface.co/pfnet/GenerRNA) | Public ncRNA mix | Apache‑2.0 |
+| [RFamLlama](https://doi.org/10.1093/nar/gkaa1047) | ncRNA | Sequence | Base | Dec‑only | Llama | CLM | 6‑10 | 13‑88 M | 0.6 M | [HuggingFace](https://huggingface.co/jinyuan22/RFamLlama-large)     | [HuggingFace](https://huggingface.co/jinyuan22/RFamLlama-large)   | Rfam 14.10  | CC BY‑NC‑4.0 |
+| [RNA‑km](https://doi.org/10.1101/2024.01.27.577533) | ncRNA | Sequence | Base | Enc‑only | Transformer | MLM | 12 | 152 M | 23 M | [GitHub](https://github.com/gongtiansu/RNA-km)             | [Drive](https://drive.google.com/drive/folders/1hC2iu9HJiUh6yIJ7qef9p0NjRbbFwZRU) | Rfam + RNAcentral | MIT |
+| [RNAErnie](https://doi.org/10.1038/s42256-024-00836-4) | ncRNA | Sequence | Base | Enc‑only | Transformer | MLM | 12 | 105 M | 23 M | [GitHub](https://github.com/CatIIIIIIII/RNAErnie)          | [GitHub](https://github.com/CatIIIIIIII/RNAErnie) | Public ncRNA mix | Apache‑2.0 |
+| [OPED](https://doi.org/10.1038/s42256-023-00739-w) | pegRNA | Sequence | k‑mer | Enc‑Dec | Transformer | Regression | n/a | n/a | 40 k | [GitHub](https://github.com/wenjiegroup/OPED)              | — | Public pegRNA eff. | MIT |
+| [GARNET](https://doi.org/10.1101/2024.04.05.588317) | rRNA | Sequence | k‑mer | Dec‑only | Transformer | CLM | 18 | 19 M | 89 M tokens | [GitHub](https://github.com/Doudna-lab/GARNET_DL)          | [Release](https://github.com/Doudna-lab/GARNET_DL/releases) | Public rRNA | MIT |
+| [IsoCLR](https://doi.org/10.48550/arXiv.2402.05943) | pre‑mRNA | Sequence | One‑hot | Enc‑only | CNN | Contrast Learning | 8 | 1‑10 M | 1 M | [GitHub](https://github.com/isoform/isoCLR)                | — | Ensembl / RefSeq | — |
+| [SpliceBERT](https://doi.org/10.1101/2023.01.31.526427) | pre‑mRNA | Sequence | Base | Enc‑only | Transformer | MLM | 6 | 20 M | 2 M | [GitHub](https://github.com/chenkenbio/SpliceBERT)         | [Zenodo](https://zenodo.org/record/7740373) | UCSC/GENCODE | MIT |
+| [Orthrus](https://doi.org/10.1101/2024.10.10.617658) | pre‑mRNA | Sequence | Base | Enc‑only | Mamba | Contrast Learning | 3‑6 | 1‑10 M | 49 M | [GitHub](https://github.com/bowang-lab/Orthrus)            | [HuggingFace](https://huggingface.co/antichronology/orthrus-4track) | Ortholog set  | Apache‑2.0 |
+| [LoRNA](https://doi.org/10.1101/2024.08.26.609813) | pre‑mRNA | Sequence | Base | Dec‑only | StripedHyena | Contrast Learning | 16 | 6.5 M | 100 M | [GitHub](https://github.com/goodarzilab/lorna-sh)          | (announced) | SRA (long‑read) | MIT |
+| [CodonBERT](https://doi.org/10.1101/2023.09.09.556981) | mRNA CDS | Sequence | Codon | Enc‑only | Transformer | MLM / HSP | 12 | 87 M | 10 M | [GitHub](https://github.com/Sanofi-Public/CodonBERT)       | [HuggingFace](https://huggingface.co/Sanofi/CodonBERT) | NCBI mRNA | Apache‑2.0 |
+| [UTR‑LM](https://doi.org/10.1101/2023.10.11.561938) | 5′UTR | Sequence | Base | Enc‑only | Transformer | MLM / SSP / MFE | 6 | 1 M | 0.7 M | [GitHub](https://github.com/a96123155/UTR-LM)              | [GitHub](https://github.com/a96123155/UTR-LM) | Public 5′UTR set | MIT |
+| [3UTRBERT](https://doi.org/10.1101/2023.09.08.556883) | 3′UTR | Sequence | k‑mer | Enc‑only | Transformer | MLM | 12 | 86 M | 20 k | [GitHub](https://github.com/yangyn533/3UTRBERT)            | [HuggingFace](https://huggingface.co/yangyn533/3UTRBERT) | Public 3′UTR | MIT |
+| [G4mer](https://doi.org/10.1101/2024.10.01.616124) | mRNA | Sequence | k‑mer | Enc‑only | Transformer | MLM | 6 | — | — | —                                                          | — | — | — |
+| [HELM](https://doi.org/10.48550/arXiv.2410.12459) | mRNA | Sequence | Codon | Multi | Multi | MLM + CLM | — | 50 M | 15.3 M | —                                                          | — | — | — |
+| [RiNALMo](https://doi.org/10.48550/arXiv.2403.00043) | RNA | Sequence | Base | Enc‑only | Transformer | MLM | 33 | 135‑650 M | 36 M | [GitHub](https://github.com/rjpenic/RiNALMo)               | (request) | Public ncRNA | MIT |
+| [UNI‑RNA](https://doi.org/10.1101/2023.07.11.548588) | RNA | Sequence | Base | Enc‑only | Transformer | MLM | 24 | 400 M | 500 M | —                                                          | — | — | — |
+| [ATOM‑1](https://doi.org/10.1101/2023.12.13.571579) | RNA | Sequence | Base | Enc‑Dec | Transformer | — | — | — | — | —                                                          | — | — | — |
+| [BiRNA‑BERT](https://doi.org/10.1101/2024.07.02.601703) | RNA | Sequence | Base + BPE | Enc‑only | Transformer | MLM | 12 | 117 M | 36 M | [GitHub](https://github.com/buetnlpbio/BiRNA-BERT)         | [HuggingFace](https://huggingface.co/buetnlpbio/BiRNA-BERT) | Public ncRNA | MIT |
+| [ChaRNABERT](https://doi.org/10.48550/arXiv.2411.11808) | RNA | Sequence | GBST | Enc‑only | Transformer | MLM | 6‑33 | 8‑650 M | 62 M | —                                                          | (8 M demo) | Public ncRNA | — |
+| [DGRNA](https://doi.org/10.1101/2024.10.31.621427) | RNA | Sequence | Base | Enc‑only | Mamba | MLM | 12 | 100 M | 100 M | —                                                          | — | — | — |
+| [LAMAR](https://doi.org/10.1101/2024.10.12.617732) | RNA | Sequence | Base | Enc‑only | Transformer | MLM | 12 | 150 M | 15 M | [GitHub](https://github.com/zhw-e8/LAMAR)                  | (announced) | Public ncRNA | MIT |
+| [OmniGenome](https://doi.org/10.48550/arXiv.2407.11242) | RNA | Sequence, Structure | Base | Enc‑only | Transformer | MLM / Seq2Str / Str2Seq | 16‑32 | 52‑186 M | 25 M | [GitHub](https://github.com/yangheng95/OmniGenBench)       | [HuggingFace](https://huggingface.co/yangheng95/OmniGenBench) | Public multi‑omics | Apache‑2.0 |
+| [PlantRNA‑FM](https://doi.org/10.1038/s42256-024-00946-z) | RNA | Sequence, Structure | Base | Enc‑only | Transformer | MLM / SSP / CLS | 12 | 35 M | 25 M | [HuggingFace](https://huggingface.co/yangheng/PlantRNA-FM) | [HuggingFace](https://huggingface.co/yangheng/PlantRNA-FM) | Plant RNA set | CC BY‑NC‑4.0 |
+| [MP‑RNA](https://doi.org/10.18653/v1/2024.findings-emnlp.304) | RNA | Sequence, Structure | Base | Enc‑only | Transformer | SSP / SNMR / MRLM | 12 | 52‑186 M | 25 M | [GitHub](https://github.com/yangheng95/OmniGenBench)       | (planned) | Public ncRNA mix | Apache‑2.0 |
 
 ---
 
