@@ -522,6 +522,15 @@ If you use RNA-FM or any components of this ecosystem in your research, please c
   journal={arXiv preprint arXiv:2002.05810},
   year={2020}
 }
+
+@article{WANG2025102991,
+   title = {Deep learning for RNA structure prediction},
+   author = {Jiuming Wang and Yimin Fan and Liang Hong and Zhihang Hu and Yu Li},
+   journal = {Current Opinion in Structural Biology},
+   year = {2025},
+   doi = {https://doi.org/10.1016/j.sbi.2025.102991},
+   url = {https://www.sciencedirect.com/science/article/pii/S0959440X25000090},
+}
 ```
 
 ### RNA Design & Inverse Folding
