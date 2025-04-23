@@ -84,6 +84,7 @@ These tools work in concert with RNA-FM to **predict RNA structures from sequenc
 - [**RNA-FM (Foundation Model)**](https://github.com/ml4bio/RNA-FM) – A BERT-style Transformer (12 layers, 640 hidden dim) trained on millions of RNA sequences. It learns general-purpose RNA embeddings that encode structural and functional information. RNA-FM provides APIs for embedding extraction and can directly predict base-pairing probabilities for secondary structure.
 
   <details><summary>Click to expand RNA-FM details</summary>
+  <br>
 
   [![CUHKServer](https://img.shields.io/badge/CUHK%20Server-Running-green.svg)](https://proj.cse.cuhk.edu.hk/rnafm/#/)
   [![arXiv](https://img.shields.io/badge/arXiv-2204.00300-b31b1b.svg)](https://arxiv.org/abs/2204.00300)
@@ -105,7 +106,8 @@ These tools work in concert with RNA-FM to **predict RNA structures from sequenc
 - [**RhoFold (Tertiary Structure Prediction)**](https://github.com/ml4bio/RhoFold) – An RNA-FM–powered predictor for RNA 3D structures. Given an RNA sequence, RhoFold rapidly predicts its tertiary structure (3D coordinates in PDB format) along with the secondary structure (CT file) and per-residue confidence scores. It achieves high accuracy on RNA 3D benchmarks by combining RNA-FM embeddings with a structure prediction network, significantly outperforming prior methods in the RNA-Puzzles challenge.
 
   <details><summary>Click to expand RhoFold details</summary>
-  
+   <br>
+
     [![CUHKServer](https://img.shields.io/badge/CUHK%20Server-Running-green.svg)](https://proj.cse.cuhk.edu.hk/aihlab/RhoFold/)
     [![Nature Methods](https://img.shields.io/badge/Nature_Methods-10.1038/s41592--024--02487--0-1f77b4.svg)](https://www.nature.com/articles/s41592-024-02487-0)
 
@@ -116,7 +118,6 @@ These tools work in concert with RNA-FM to **predict RNA structures from sequenc
     - Delivers top accuracy on RNA-Puzzles / CASP-type tasks.
     - Predicts 3D structures **within seconds** (single-sequence mode) and integrates MSA for further accuracy gains.
     - Achieved *Nature Methods*–level benchmarks, generalizing to novel RNA families.
-    - 
   </details>
 
 #### RiboDiffusion (Inverse Folding – Diffusion)
@@ -124,6 +125,7 @@ These tools work in concert with RNA-FM to **predict RNA structures from sequenc
 - [**RiboDiffusion (Inverse Folding – Diffusion)**](https://github.com/ml4bio/RiboDiffusion) – A diffusion-based inverse folding model for RNA design. Starting from a target 3D backbone structure, RiboDiffusion iteratively generates RNA sequences that fold into that shape. This generative approach yields higher sequence recovery (≈11–16% improvement) than previous inverse folding algorithms, while offering tunable diversity in the designed sequences.
 
   <details><summary>Click to expand RiboDiffusion details</summary>
+  <br>
 
   [![Bioinformatics](https://img.shields.io/badge/Bioinformatics-10.1093/bioinformatics/btab616-0887f7.svg)](https://academic.oup.com/bioinformatics/article/40/Supplement_1/i347/7700903)
 
@@ -142,6 +144,7 @@ These tools work in concert with RNA-FM to **predict RNA structures from sequenc
 - [**RhoDesign (Inverse Folding – Deterministic)**](https://github.com/ml4bio/RhoDesign) – A deterministic geometric deep learning model for RNA design. RhoDesign uses graph neural networks (GVP) and Transformers to directly decode sequences for a given 3D structure (optionally incorporating secondary structure constraints). It achieves state-of-the-art accuracy in matching target structures, with sequence recovery rates exceeding 50% on standard benchmarks (nearly double traditional methods) and the highest structural fidelity (TM-scores) among current solutions.
 
   <details><summary>Click to expand RhoDesign details</summary>
+  <br>
 
     [![Nature Computational Science](https://img.shields.io/badge/Nature_Computational_Science-10.1038/s43588--024--00720--6-1f77b4.svg)](https://www.nature.com/articles/s43588-024-00720-6)
 
