@@ -9,7 +9,7 @@ from setuptools import setup
 with open("fm/version.py") as infile:
     exec(infile.read())
 
-with open("README.md") as f:
+with open("README_backup.md") as f:
     readme = f.read()
 
 
