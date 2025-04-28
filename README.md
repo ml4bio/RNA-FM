@@ -5,12 +5,18 @@
 [![Nature Methods](https://img.shields.io/badge/Nature_Methods-10.1038/s41592--024--02487--0-1f77b4.svg)](https://www.nature.com/articles/s41592-024-02487-0)
 [![Nature Computational Science](https://img.shields.io/badge/Nature_Computational_Science-10.1038/s43588--024--00720--6-1f77b4.svg)](https://www.nature.com/articles/s43588-024-00720-6)
 [![Bioinformatics](https://img.shields.io/badge/Bioinformatics-10.1093/bioinformatics/btab616-0887f7.svg)](https://academic.oup.com/bioinformatics/article/40/Supplement_1/i347/7700903)
-[![RNA-FM Server](https://img.shields.io/badge/RNA_FM%20Server-Running-green.svg)](https://proj.cse.cuhk.edu.hk/rnafm/#/)
+[![RNA-FM Server](https://img.shields.io/badge/RNA--FM%20Server-Running-green.svg)](https://proj.cse.cuhk.edu.hk/rnafm/#/)
 [![RhoFold Server](https://img.shields.io/badge/RhoFold%20Server-Running-green.svg)](https://proj.cse.cuhk.edu.hk/aihlab/RhoFold/#/)
+
+[//]: # ([![HuggingFace]&#40;https://img.shields.io/badge/huggingface-RNA--FM-FFD21E?logo=huggingface&logoColor=white&style=flat&#41;]&#40;https://huggingface.co/multimolecule/rnafm&#41;)
+
+[//]: # ([![HuggingFace]&#40;https://img.shields.io/badge/huggingface-mRNA--FM-FFD21E?logo=huggingface&logoColor=white&style=flat&#41;]&#40;https://huggingface.co/multimolecule/mrnafm&#41;)
 
 ## Introduction
 
-[**RNA-FM** (RNA Foundation Model)](https://arxiv.org/abs/2204.00300) is a state-of-the-art **pretrained language model for RNA sequences**, serving as the cornerstone of an integrated RNA research ecosystem. Trained on **23+ million non-coding RNA (ncRNA) sequences** via self-supervised learning, RNA-FM extracts comprehensive structural and functional information from RNA sequences *without* relying on experimental labels. Consequently, RNA-FM generates **general-purpose RNA embeddings** suitable for a broad range of downstream tasks, including but not limited to secondary and tertiary structure prediction, RNA family clustering, and functional RNA analysis.
+[**RNA-FM** (RNA Foundation Model)](https://arxiv.org/abs/2204.00300) is a state-of-the-art **pretrained language model for RNA sequences**, serving as the cornerstone of an integrated RNA research ecosystem. Trained on **23+ million non-coding RNA (ncRNA) sequences** via self-supervised learning, RNA-FM extracts comprehensive structural and functional information from RNA sequences *without* relying on experimental labels.
+**[mRNA‑FM](https://arxiv.org/abs/2204.00300)** is a direct extension of RNA-FM, trained exclusively on 45 million mRNA coding sequences (CDS). It is specifically designed to capture information unique to mRNA and has demonstrated excellent performance in related tasks.
+Consequently, RNA-FM generates **general-purpose RNA embeddings** suitable for a broad range of downstream tasks, including but not limited to secondary and tertiary structure prediction, RNA family clustering, and functional RNA analysis.
 
 Originally introduced in [*Nature Methods*](https://arxiv.org/abs/2204.00300) as a foundational model for RNA biology, RNA-FM outperforms all evaluated single-sequence RNA language models across a wide reange of structure and function benchmarks, enabling unprecedented accuracy in RNA analysis. Building upon this foundation, our team developed an **integrated RNA pipeline** that includes:
 
@@ -35,19 +41,24 @@ These tools work alongside RNA-FM to **predict RNA structures from sequence, des
 <details open><summary><b>Table of Contents</b></summary>
 
 - [Introduction](#introduction)
-- [RNA-FM and Related Tools](#rna-fm-and-related-tools)
-  - [RNA-FM (Foundation Model)](#rna-fm-foundation-model)
-  - [Downstream Tools](#downstream-tools)
+- [Foundation Models and Extended Ecosystem](#foundation-models-and-extended-ecosystem)
+  - [Foundation Model](#foundation-models)
+    - [RNA-FM](#rna-fm)
+    - [mRNA-FM](#mrna-fm)
+  - [Downstream Ecosystem](#downstream-tools)
     - [RhoFold (Tertiary Structure Prediction)](#rhofold-tertiary-structure-prediction)
     - [RiboDiffusion (Inverse Folding – Diffusion)](#ribodiffusion-inverse-folding--diffusion)
     - [RhoDesign (Inverse Folding – Deterministic)](#rhodesign-inverse-folding--deterministic)
-- [Applications](#applications)
+- [Related Research](#applications)
 - [Setup and Usage](#setup-and-usage)
   - [Setup Environment with Conda](#setup-environment-with-conda)
   - [Quick Start Usage](#quick-start-usage)
   - [Online Server](#online-server)
 - [Further Development & Python API](#further-development--python-api)
   - [Tutorials](#tutorials)
+    - [RNA-FM](#rna-fm-1)
+    - [mRNA-FM](#mrna-fm-1)
+    - [Notebooks](#notebooks)
   - [Usage Examples with the Ecosystem](#usage-examples-with-the-ecosystem)
   - [API Reference](#api-reference)
 - [Related RNA Language Models](#related-rna-language-models)
@@ -57,35 +68,50 @@ These tools work alongside RNA-FM to **predict RNA structures from sequence, des
 </details>
 
 ---
-## RNA-FM and Related Tools
+## Foundation Models and Extended Ecosystem
 
 **RNA-FM Ecosystem Components**: Our platform comprises four integrated tools, each addressing a critical step in the RNA analysis and design pipeline:
 
-| Model | Task                                                                                                                     | Description                                                                                                          | Code | Paper                                                                                         |
-|-------|--------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------|------|-----------------------------------------------------------------------------------------------|
-| **RNA-FM** | **Foundation Model** (Representation)                                                                                    | Pretrained transformer (BERT-style) for ncRNA sequences; extracts embeddings and predicts base-pairing probabilities | [GitHub](https://github.com/ml4bio/RNA-FM) | [Nature Methods](https://arxiv.org/abs/2204.00300)|
-| **RhoFold** | 3D Structure Prediction | RNA-FM-powered model for sequence-to-structure prediction (3D coordinates + secondary structure)                     | [GitHub](https://github.com/ml4bio/RhoFold) | [Nature Methods](https://www.nature.com/articles/s41592-024-02487-0)|
-| **RiboDiffusion** | Inverse Folding                                                                                                          | Generative diffusion model for structure-to-sequence RNA design                                                      | [GitHub](https://github.com/ml4bio/RiboDiffusion) | [ISMB'2024](https://academic.oup.com/bioinformatics/article/40/Supplement_1/i347/7700903) |
-| **RhoDesign** | Inverse Folding                                                                                                          | Geometric deep learning model (GVP+Transformer) for structure-to-sequence design                                     | [GitHub](https://github.com/ml4bio/RhoDesign) | [Nature Computational Science](https://www.nature.com/articles/s43588-024-00720-6)|
+| Model             | Task                                  | Description                                                                                                                                                                 | Code                                              | Paper                                                                                     |
+|-------------------|---------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------|-------------------------------------------------------------------------------------------|
+| **RNA-FM**        | **Foundation Model** (Representation) | Pretrained transformer (BERT-style) for ncRNA sequences (for RNA-FM) and messenger RNA sequences (for mRNA-FM); extracts embeddings and predicts base-pairing probabilities | [GitHub](https://github.com/ml4bio/RNA-FM)        | [Nature Methods](https://arxiv.org/abs/2204.00300)                                        |
+| **RhoFold**       | 3D Structure Prediction               | RNA-FM-powered model for sequence-to-structure prediction (3D coordinates + secondary structure)                                                                            | [GitHub](https://github.com/ml4bio/RhoFold)       | [Nature Methods](https://www.nature.com/articles/s41592-024-02487-0)                      |
+| **RiboDiffusion** | Inverse Folding                       | Generative diffusion model for structure-to-sequence RNA design                                                                                                             | [GitHub](https://github.com/ml4bio/RiboDiffusion) | [ISMB'2024](https://academic.oup.com/bioinformatics/article/40/Supplement_1/i347/7700903) |
+| **RhoDesign**     | Inverse Folding                       | Geometric deep learning model (GVP+Transformer) for structure-to-sequence design                                                                                            | [GitHub](https://github.com/ml4bio/RhoDesign)     | [Nature Computational Science](https://www.nature.com/articles/s43588-024-00720-6)        |
 
-### RNA-FM (Foundation Model)
-- [**RNA-FM (Foundation Model)**](https://github.com/ml4bio/RNA-FM) is a BERT-style Transformer model (12 layers, 640 hidden dimensions) trained on millions of RNA sequences. RNA-FM learns general-purpose RNA representations that encode both structural and functional information. It provides APIs for embedding extraction and can directly predict base-pairing probabilities for RNA secondary structure.
+### Foundation Models
+
+| Model       | Training Corpus | # Sequences | Layers / Hidden | Params | Typical Use-cases                          |
+|-------------|-----------------|:-----------:|:---------------:|:------:|--------------------------------------------|
+| **RNA-FM**  | non-coding RNAs | **23.7 M**  |    12 / 640     |  99 M  | ncRNA structure & function, aptamer design |
+| **mRNA-FM** | messenger RNAs  |  **45 M**   |    12 / 1280    | 239 M  | mRNA expression modelling, CDS analysis    |
+
+#### RNA-FM
+
+[//]: # (- **RNA-FM** is a BERT-style Transformer model &#40;12 layers, 640 hidden dimensions&#41; trained on over 23 million non-coding RNA sequences. RNA-FM learns general-purpose RNA representations that encode both structural and functional information. It provides APIs for embedding extraction and can directly predict base-pairing probabilities for RNA secondary structure.)
+- **RNA-FM** is a 12-layer BERT encoder pre-trained with masked‐token prediction on **23.7 M** non-coding RNA sequences (RNAcentral100). It yields 640-d embeddings that already encode secondary-structure, 3-D proximity and even evolutionary signals, making it the representation backbone for every downstream tool in the ecosystem.
 
   <details open><summary>Click to fold RNA-FM details</summary>
-  <br>
   
-  [![CUHKServer](https://img.shields.io/badge/CUHK%20Server-Running-green.svg)](https://proj.cse.cuhk.edu.hk/rnafm/#/)
-  [![arXiv](https://img.shields.io/badge/arXiv-2204.00300-b31b1b.svg)](https://arxiv.org/abs/2204.00300)
-    
-    RNA-FM is pre-trained on massive RNA sequence data (RNAcentral) to produce contextual embeddings. These embeddings fuel structure-related tasks (e.g., secondary structure prediction, 3D distance/closeness prediction) and function-related tasks (e.g., UTR function, RNA-protein interaction). The RNA-FM model (12-layer Transformer) is at the core of both pre-training and fine-tuning stages, providing generalizable representations. Downstream, specialized tools (RhoFold, RiboDiffusion, RhoDesign) leverage RNA-FM for end-to-end RNA engineering.
-  
-  [![RNA-FM Overview](./docs/pics/overview.png)](https://github.com/ml4bio/RNA-FM)
+    [![CUHKServer](https://img.shields.io/badge/CUHK%20Server-Running-green.svg)](https://proj.cse.cuhk.edu.hk/rnafm/#/)
+    [![arXiv](https://img.shields.io/badge/arXiv-2204.00300-b31b1b.svg)](https://arxiv.org/abs/2204.00300)
 
-  - **RNA-FM** for Secondary Structure Prediction:
-    - Outperforms classic physics-based and machine learning methods (e.g., LinearFold, SPOT-RNA, UFold) by up to **20–30%** in F1-score on challenging datasets.
-    - Performance gains are especially notable for long RNAs (>150 nucleotides) and low-homology families
+    [//]: # (    RNA-FM is pre-trained on massive RNA sequence data &#40;RNAcentral&#41; to produce contextual embeddings. These embeddings fuel structure-related tasks &#40;e.g., secondary structure prediction, 3D distance/closeness prediction&#41; and function-related tasks &#40;e.g., UTR function, RNA-protein interaction&#41;. The RNA-FM model &#40;12-layer Transformer&#41; is at the core of both pre-training and fine-tuning stages, providing generalizable representations. Downstream, specialized tools &#40;RhoFold, RiboDiffusion, RhoDesign&#41; leverage RNA-FM for end-to-end RNA engineering.)
+
+    [//]: # (    RNA-FM is pre-trained in a self-supervised fashion on 23.7 million non-coding RNA sequences drawn from the RNAcentral100 collection. During pre-training, 15% of nucleotides are randomly masked and recovered with the BERT masked-language-model objective. The network adopts a BERT-base encoder &#40;12 layers, 640-d hidden size, 20 attention heads, 1024-nt maximum length&#41; and was optimised for about one month on 8 × A100-80 GB GPUs.)
     
+    [![RNA-FM Overview](./docs/pics/overview.png)](https://github.com/ml4bio/RNA-FM)
+  
+    - **RNA-FM** for Secondary Structure Prediction:
+      - Outperforms classic physics-based and machine learning methods (e.g., LinearFold, SPOT-RNA, UFold) by up to **20–30%** in F1-score on challenging datasets.
+      - Performance gains are especially notable for long RNAs (>150 nucleotides) and low-homology families
+      
   </details>
+
+#### mRNA-FM
+
+[//]: # (- **mRNA-FM** is a BERT-style Transformer &#40;12 layers, 1280 hidden dimensions&#41; trained on 45 million coding sequences &#40;CDS&#41;. )
+- **mRNA-FM**, an extension of RNA-FM, is exclusively trained on 45 million mRNA coding sequences (CDS). Purpose-built to model mRNA-specific features, it achieves state-of-the-art performance in mRNA-related tasks.
 
 ### Downstream Tools
 
@@ -94,7 +120,6 @@ These tools work alongside RNA-FM to **predict RNA structures from sequence, des
 - [**RhoFold (Tertiary Structure Prediction)**](https://github.com/ml4bio/RhoFold) – An RNA-FM–powered predictor for RNA 3D structures. Given an RNA sequence, RhoFold rapidly predicts its tertiary structure (3D coordinates in PDB format) along with the secondary structure (CT file) and per-residue confidence scores. It achieves high accuracy on RNA 3D benchmarks by combining RNA-FM embeddings with a structure prediction network, significantly outperforming prior methods in the RNA-Puzzles challenge.
 
   <details><summary>Click to expand RhoFold details</summary>
-   <br>
 
     [![CUHKServer](https://img.shields.io/badge/CUHK%20Server-Running-green.svg)](https://proj.cse.cuhk.edu.hk/aihlab/RhoFold/)
     [![Nature Methods](https://img.shields.io/badge/Nature_Methods-10.1038/s41592--024--02487--0-1f77b4.svg)](https://www.nature.com/articles/s41592-024-02487-0)
@@ -113,7 +138,6 @@ These tools work alongside RNA-FM to **predict RNA structures from sequence, des
 - [**RiboDiffusion (Inverse Folding – Diffusion)**](https://github.com/ml4bio/RiboDiffusion) – A diffusion-based inverse folding model for RNA design. Starting from a target 3D backbone structure, RiboDiffusion iteratively generates RNA sequences that fold into that shape. This generative approach yields higher sequence recovery (≈11–16% improvement) than previous inverse folding algorithms, while offering tunable diversity in the designed sequences.
 
   <details><summary>Click to expand RiboDiffusion details</summary>
-  <br>
 
   [![Bioinformatics](https://img.shields.io/badge/Bioinformatics-10.1093/bioinformatics/btab616-0887f7.svg)](https://academic.oup.com/bioinformatics/article/40/Supplement_1/i347/7700903)
 
@@ -132,7 +156,6 @@ These tools work alongside RNA-FM to **predict RNA structures from sequence, des
 - [**RhoDesign (Inverse Folding – Deterministic)**](https://github.com/ml4bio/RhoDesign) – A deterministic geometric deep learning model for RNA design. RhoDesign uses graph neural networks (GVP) and Transformers to directly decode sequences for a given 3D structure (optionally incorporating secondary structure constraints). It achieves state-of-the-art accuracy in matching target structures, with sequence recovery rates exceeding 50% on standard benchmarks (nearly double traditional methods) and the highest structural fidelity (TM-scores) among current solutions.
 
   <details><summary>Click to expand RhoDesign details</summary>
-  <br>
 
     [![Nature Computational Science](https://img.shields.io/badge/Nature_Computational_Science-10.1038/s43588--024--00720--6-1f77b4.svg)](https://www.nature.com/articles/s43588-024-00720-6)
 
@@ -265,6 +288,8 @@ If you prefer **not to install** anything locally, you can use our **[RNA-FM ser
 
 ## Further Development & Python API
 
+### Tutorials
+
 If you only want to **use the pretrained model** (rather than run all pipeline scripts), you can install `RNA-FM` directly:
 
 ```bash
@@ -277,6 +302,8 @@ Alternatively, for the latest version from GitHub:
 cd ./RNA-FM
 pip install .
 ```
+
+#### RNA-FM
 
 Then, load **RNA-FM** within your own Python project:
 
@@ -302,6 +329,8 @@ with torch.no_grad():
     results = model(batch_tokens, repr_layers=[12])
 token_embeddings = results["representations"][12]
 ```
+
+#### mRNA-FM
 
 For **mRNA-FM**, load with `fm.pretrained.mrna_fm_t12()` and ensure input sequences are codon-aligned (as shown in the Quick Start above).
 
@@ -330,7 +359,7 @@ token_embeddings = results["representations"][12]
 
 More tutorials can be found from [GitHub](https://ml4bio.github.io/RNA-FM/). The related notebooks are stored in the [tutorials](./tutorials) folder.
 
-### Tutorials
+#### Notebooks
 
 Get started with RNA-FM through our comprehensive tutorials:
 
