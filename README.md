@@ -219,7 +219,7 @@ conda activate RNA-FM
 cd ./redevelop
 ```
 
-3. **Download pre-trained models** from our [Google Drive folder](https://drive.google.com/drive/folders/1VGye74GnNXbUMKx6QYYectZrY7G2pQ_J?usp=share_link) and place the `.pth` files into the `pretrained` folder.  
+3. **Download pre-trained models** from our [Hugging Face repo](https://huggingface.co/cuhkaih/rnafm/tree/main) and place the `.pth` files into the `pretrained` folder.  
 
     > For **mRNA-FM**, ensure that your input RNA sequences have lengths multiple of 3 (codons) and place the specialized weights for *mRNA-FM* in the same `pretrained` folder.
 
