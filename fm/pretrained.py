@@ -154,7 +154,7 @@ def load_model_and_alphabet_core(model_name, model_data, regression_data=None, t
 
 def load_fm_model_and_alphabet_hub(model_name, theme="rna"):
     if model_name == "rna_fm_t12":
-        url = f"https://huggingface.co/cuhkaih/rnafm/resolve/main/RNA-FM_pretrained.pth"
+        url = f"https://proj.cse.cuhk.edu.hk/rnafm/api/download?filename=RNA-FM_pretrained.pth"
         model_data = load_hub_workaround(url, download_name="RNA-FM_pretrained.pth")
         #url = f"https://proj.cse.cuhk.edu.hk/rnafm/api/download?filename=RNA-FM_SS-ResNet.pth"
         #model_data = load_hub_workaround(url, download_name="RNA-FM_SS-ResNet.pth")
